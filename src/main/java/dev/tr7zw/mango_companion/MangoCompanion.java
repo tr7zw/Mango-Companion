@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 
 import dev.tr7zw.mango_companion.parser.Chapter;
 import dev.tr7zw.mango_companion.parser.Mangadex;
+import dev.tr7zw.mango_companion.parser.Manganato;
 import dev.tr7zw.mango_companion.parser.Parser;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class MangoCompanion implements Runnable {
 
     private final File workingDir;
     private final Config config;
-    private Set<Parser> parsers = Sets.newHashSet(new Mangadex());
+    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new Manganato());
 
     @Override
     public void run() {
@@ -30,7 +31,7 @@ public class MangoCompanion implements Runnable {
             for (String url : config.getUrls()) {
                 try {
                     updateManga(url);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     log.log(Level.SEVERE, "Error while updating manga '" + url + "'!", e);
                 }
             }
@@ -52,10 +53,12 @@ public class MangoCompanion implements Runnable {
         }
         if (parser == null) {
             log.warning("No parser found for url " + url);
+            return;
         }
         String name = config.getFolderOverwrites().containsKey(url) ? config.getFolderOverwrites().get(url)
                 : parser.getName(url); // Use overwrite, else parse the name
-        File targetDir = new File(name);
+        name = cleanName(name);
+        File targetDir = new File(workingDir, name);
         targetDir.mkdirs();
         log.fine("Updating " + name + "...");
         Iterator<Chapter> chapters = parser.getChapters(new FileChecker(targetDir), url);
@@ -71,6 +74,26 @@ public class MangoCompanion implements Runnable {
             zipPart.renameTo(zip);
             log.info("Downloaded " + zip.getAbsolutePath());
         }
+    }
+    
+    /**
+     * Remove invalid chars/trim string length. TODO better method
+     * 
+     * @param title
+     * @return
+     */
+    private String cleanName(String title) {
+        title = title.replace('|', '-');
+        title = title.replace(':', '-');
+        title = title.replace('\'','-');
+        title = title.replace('.', ',');
+        title = title.replace('"', '\'');
+        title = title.replace('"', '\'');
+        title = title.replace('@', 'A');
+        if(title.length() > 60)
+            title = title.substring(0, 50);
+        title = title.trim();
+        return title;
     }
 
 }

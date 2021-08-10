@@ -10,15 +10,22 @@ import lombok.AllArgsConstructor;
 public class FileChecker {
 
     private File folder;
-    
+
     public boolean knownChapter(Chapter chapter) {
         return folder.list(new FilenameFilter() {
-            
+
             @Override
             public boolean accept(File dir, String name) {
-                return name.contains("Chapter " + chapter.getChapterId()) && !name.endsWith("_part");
+                return name.contains("Chapter " + chapter.getChapterId()) && !name.endsWith("_part"); // FIXME Currently
+                                                                                                      // can confuse
+                                                                                                      // Chapter 100 for
+                                                                                                      // Chapter 1, this
+                                                                                                      // is only an
+                                                                                                      // issue if you
+                                                                                                      // download past
+                                                                                                      // chapters?
             }
         }).length != 0;
     }
-    
+
 }

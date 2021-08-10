@@ -15,7 +15,15 @@ public class App
 {
     public static void main( String[] args ) throws IOException
     {
-        File workingDir = new File(".");
+        if(args.length != 1) {
+            System.out.println("Root path to the library is required!");
+            return;
+        }
+        File workingDir = new File(args[0]);
+        if(!workingDir.exists() || !workingDir.isDirectory()) {
+            System.out.println("Not a valid directory!");
+            return;
+        }
         File configFile = new File(workingDir, "config.json");
         Config config = new Config();
         if(configFile.exists()) {

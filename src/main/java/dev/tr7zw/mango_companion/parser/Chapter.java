@@ -11,7 +11,7 @@ import lombok.ToString;
 public class Chapter {
 
     private final Parser parser;
-    private final String mangaUrl;
+    private final String url;
     private final String chapterId;
     
     @Setter
