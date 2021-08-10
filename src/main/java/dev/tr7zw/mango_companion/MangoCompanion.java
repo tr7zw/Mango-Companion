@@ -12,6 +12,7 @@ import com.google.common.collect.Sets;
 import dev.tr7zw.mango_companion.parser.Chapter;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.Manganato;
+import dev.tr7zw.mango_companion.parser.Mangatx;
 import dev.tr7zw.mango_companion.parser.Parser;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class MangoCompanion implements Runnable {
 
     private final File workingDir;
     private final Config config;
-    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new Manganato());
+    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new Manganato(), new Mangatx());
 
     @Override
     public void run() {
