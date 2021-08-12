@@ -22,6 +22,7 @@ import lombok.extern.java.Log;
 @RequiredArgsConstructor
 public class MangoCompanion implements Runnable {
 
+    private static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
     private final File workingDir;
     private final Config config;
     private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new Manganato(), new Mangatx());
@@ -91,7 +92,7 @@ public class MangoCompanion implements Runnable {
         title = title.replace('"', '\'');
         title = title.replace('"', '\'');
         title = title.replace('@', 'A');
-        if(title.length() > 60)
+        if(windows &&  title.length() > 60)
             title = title.substring(0, 50);
         title = title.trim();
         return title;

@@ -78,7 +78,7 @@ public class Manganato implements Parser {
                 page++;
             }
         } catch (Exception e) {
-            throw new IOException(e);
+            throw new IOException("Error while downloading Chapter " + chapter.getChapterId(), e);
         }
     }
 

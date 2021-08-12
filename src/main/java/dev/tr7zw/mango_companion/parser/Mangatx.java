@@ -64,7 +64,7 @@ public class Mangatx implements Parser{
     public void downloadChapter(File target, Chapter chapter) throws IOException {
         if (chapter.getParser().getClass() != this.getClass())
             throw new RuntimeException("Incompatible Chapter to Parser");
-        Document doc =  crawler.getDocument(chapter.getUrl());
+        Document doc = crawler.getDocument(chapter.getUrl());
         List<String> urls = new ArrayList<>();
         for(Element entry : doc.getElementsByClass("wp-manga-chapter-img")) {
             if(entry.hasAttr("data-src")) {
@@ -80,7 +80,7 @@ public class Mangatx implements Parser{
                 page++;
             }
         } catch (Exception e) {
-            throw new IOException(e);
+            throw new IOException("Error while downloading Chapter " + chapter.getChapterId(), e);
         }
     }
 
