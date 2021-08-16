@@ -3,9 +3,17 @@ package dev.tr7zw.mango_companion;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
+
+import org.javacord.api.DiscordApi;
+import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import com.google.common.collect.Sets;
 
@@ -27,14 +35,42 @@ public class MangoCompanion implements Runnable {
     private final Config config;
     private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new Manganato(), new Mangatx());
 
+    // Discord
+    private static DiscordApi api = null;
+    private static TextChannel targetChannel = null;
+    
     @Override
     public void run() {
+        if(config.getDiscordApiToken() != null && !config.getDiscordApiToken().isBlank() && config.getChannelId() != -1) {
+            try {
+                api = new DiscordApiBuilder().setToken(config.getDiscordApiToken()).login().join();
+                log.info("Url to add the bot to your Discord: " + api.createBotInvite());
+                Optional<TextChannel> channel = api.getTextChannelById(config.getChannelId());
+                if(channel.isPresent()) {
+                    targetChannel = channel.get();    
+                }else {
+                    throw new IllegalArgumentException("Discord channel not found! Is the bot on the correct server?");
+                }
+            }catch(Exception ex) {
+                log.log(Level.SEVERE, "Error while setting up the Discord bot!", ex);
+                System.exit(1);
+            }
+        }
+        
         while (true) {
+            List<String> updated = new ArrayList<>();
             for (String url : config.getUrls()) {
                 try {
-                    updateManga(url);
+                    updateManga(url, updated);
                 } catch (Exception e) {
                     log.log(Level.SEVERE, "Error while updating manga '" + url + "'!", e);
+                }
+            }
+            if(targetChannel != null && !updated.isEmpty()) {
+                try {
+                    targetChannel.sendMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", String.join("\n", updated))).get();
+                }catch(Exception ex) {
+                    log.log(Level.WARNING, "Error sending Discord message!", ex);
                 }
             }
             try {
@@ -45,7 +81,7 @@ public class MangoCompanion implements Runnable {
         }
     }
 
-    private void updateManga(String url) throws IOException {
+    private void updateManga(String url, List<String> updated) throws IOException {
         Parser parser = null;
         for (Parser p : parsers) {
             if (p.canParse(url)) {
@@ -75,6 +111,7 @@ public class MangoCompanion implements Runnable {
             parser.downloadChapter(zipPart, c);
             zipPart.renameTo(zip);
             log.info("Downloaded " + zip.getAbsolutePath());
+            updated.add(name + " - Chapter " + c.getChapterId());
         }
     }
     

@@ -13,4 +13,6 @@ public class Config {
     private Set<String> urls = new HashSet<>();
     private Map<String, String> folderOverwrites = new HashMap<>();
     private int sleepInMinutes = 60;
+    private String discordApiToken = "";
+    private long channelId = -1;
 }
