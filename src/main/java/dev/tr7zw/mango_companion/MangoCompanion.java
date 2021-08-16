@@ -68,7 +68,11 @@ public class MangoCompanion implements Runnable {
             }
             if(targetChannel != null && !updated.isEmpty()) {
                 try {
-                    targetChannel.sendMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", String.join("\n", updated))).get();
+                    String text = String.join("\n", updated);
+                    if(text.length() > 1000) {
+                        text = text.substring(0, 1000);
+                    }
+                    targetChannel.sendMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", text)).get();
                 }catch(Exception ex) {
                     log.log(Level.WARNING, "Error sending Discord message!", ex);
                 }
@@ -129,8 +133,12 @@ public class MangoCompanion implements Runnable {
         title = title.replace('"', '\'');
         title = title.replace('"', '\'');
         title = title.replace('@', 'A');
-        if(windows &&  title.length() > 60)
-            title = title.substring(0, 50);
+        if(windows) {
+            title = title.replace('?', '-');
+            if(title.length() > 60)
+                title = title.substring(0, 50);
+        }
+
         title = title.trim();
         return title;
     }
