@@ -106,16 +106,20 @@ public class MangoCompanion implements Runnable {
         Iterator<Chapter> chapters = parser.getChapters(new FileChecker(targetDir), url);
         while (chapters.hasNext()) {
             Chapter c = chapters.next();
-            File zip = new File(targetDir, "Chapter " + c.getChapterId() + ".zip");
-            if (zip.exists())
-                continue;
-            File zipPart = new File(targetDir, "Chapter " + c.getChapterId() + ".zip_part");
-            if (zipPart.exists())
-                zipPart.delete();
-            parser.downloadChapter(zipPart, c);
-            zipPart.renameTo(zip);
-            log.info("Downloaded " + zip.getAbsolutePath());
-            updated.add(name + " - Chapter " + c.getChapterId());
+            try { // it's save to skip broken chapters for now
+                File zip = new File(targetDir, "Chapter " + c.getChapterId() + ".zip");
+                if (zip.exists())
+                    continue;
+                File zipPart = new File(targetDir, "Chapter " + c.getChapterId() + ".zip_part");
+                if (zipPart.exists())
+                    zipPart.delete();
+                parser.downloadChapter(zipPart, c);
+                zipPart.renameTo(zip);
+                log.info("Downloaded " + zip.getAbsolutePath());
+                updated.add(name + " - Chapter " + c.getChapterId());
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error while downloading manga '" + url + "' Chapter " + c.getChapterId() + "!", e);
+            }
         }
     }
     
