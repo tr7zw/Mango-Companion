@@ -16,14 +16,7 @@ public class FileChecker {
 
             @Override
             public boolean accept(File dir, String name) {
-                return name.contains("Chapter " + chapter.getChapterId()) && !name.endsWith("_part"); // FIXME Currently
-                                                                                                      // can confuse
-                                                                                                      // Chapter 100 for
-                                                                                                      // Chapter 1, this
-                                                                                                      // is only an
-                                                                                                      // issue if you
-                                                                                                      // download past
-                                                                                                      // chapters?
+                return chapter.getChapterId().equals(ChapterParser.getChapterId(name));
             }
         }).length != 0;
     }

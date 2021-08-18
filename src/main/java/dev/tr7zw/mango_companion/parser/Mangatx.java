@@ -3,18 +3,15 @@ package dev.tr7zw.mango_companion.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.google.common.collect.Sets;
-
 import dev.tr7zw.mango_companion.crawler.MangatxCrawler;
+import dev.tr7zw.mango_companion.util.ChapterParser;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import dev.tr7zw.mango_companion.util.ZipCreator;
 import lombok.extern.java.Log;
@@ -42,15 +39,11 @@ public class Mangatx implements Parser {
             public boolean hasNext() {
                 while (id >= 0) { // we start from the bottom and go to the top
                     Element element = chapters.get(id--);
-                    if (!element.attr("href").startsWith(url + "chapter-"))
-                        continue;
                     String id = "";
-                    if (element.attr("href").startsWith(url + "chapter-")) {
-                        id = element.text().toLowerCase().replace("chapter ", "").split(" ")[0].trim();
-                    }else if(element.attr("href").startsWith(url + "ch-")) {
-                        id = element.text().toLowerCase().replace("ch.", "").split(" ")[0].trim();
+                    if (element.attr("href").startsWith(url)) {
+                        id = ChapterParser.getChapterId(element.text());
                     }
-                    if (id.isBlank())
+                    if (id == null || id.isBlank())
                         continue;
                     next = new Chapter(Mangatx.this, element.attr("href"), id);
                     if (checker.knownChapter(next)) {
