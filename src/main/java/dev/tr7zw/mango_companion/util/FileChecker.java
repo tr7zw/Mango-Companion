@@ -16,7 +16,13 @@ public class FileChecker {
 
             @Override
             public boolean accept(File dir, String name) {
-                return chapter.getChapterId().equals(ChapterParser.getChapterId(name));
+                if(name.endsWith(".zip_part")) {
+                    new File(dir, name).delete();
+                    return false;
+                }
+                String ch = ChapterParser.getChapterId(chapter.getChapterId());
+                if(ch == null)return false;
+                return ch.equals(ChapterParser.getChapterId(name));
             }
         }).length != 0;
     }

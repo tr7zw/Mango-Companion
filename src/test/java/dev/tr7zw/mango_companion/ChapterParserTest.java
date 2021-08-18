@@ -92,4 +92,9 @@ public class ChapterParserTest
         assertEquals("123", ChapterParser.getChapterId("https://example.com/manga/manga-name/ch-123/"));
     }
     
+    public void testLiterals() {
+        assertEquals("1", ChapterParser.getChapterId("1"));
+        assertEquals("123.45", ChapterParser.getChapterId("123.45"));
+    }
+    
 }

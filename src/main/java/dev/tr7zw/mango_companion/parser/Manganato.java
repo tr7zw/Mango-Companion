@@ -11,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import dev.tr7zw.mango_companion.crawler.ManganatoCrawler;
+import dev.tr7zw.mango_companion.util.ChapterParser;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import dev.tr7zw.mango_companion.util.ZipCreator;
 import lombok.extern.java.Log;
@@ -38,7 +39,7 @@ public class Manganato implements Parser {
             public boolean hasNext() {
                 while(id >= 0) { // we start from the bottom and go to the top
                     Element element = chapters.get(id--);
-                    next = new Chapter(Manganato.this, element.attr("href"), element.html().replace("Chapter ", ""));
+                    next = new Chapter(Manganato.this, element.attr("href"), ChapterParser.getChapterId(element.html()));
                     if(checker.knownChapter(next)) {
                         next = null;
                     } else {

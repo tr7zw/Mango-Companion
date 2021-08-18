@@ -9,10 +9,15 @@ public class ChapterParser {
     
     public static String getChapterId(String base) {
         Matcher matcher = pattern.matcher(base);
-        if(!matcher.find()) {
-            return null;
+        if(matcher.find()) {
+            return matcher.group(5).replace('-', '.');
         }
-        return matcher.group(5).replace('-', '.');
+        // check for a literal("5", "123.12" etc)
+        matcher = pattern.matcher("ch " + base);
+        if(matcher.find()) {
+            return matcher.group(5).replace('-', '.');
+        }
+        return null;
     }
     
 }
