@@ -97,4 +97,12 @@ public class ChapterParserTest
         assertEquals("123.45", ChapterParser.getChapterId("123.45"));
     }
     
+    public void testLeadingZeros() {
+        assertEquals("1", ChapterParser.getChapterId("001"));
+        assertEquals("1", ChapterParser.getChapterId("Chapter 001"));
+        assertEquals("1.1", ChapterParser.getChapterId("Chapter 001.1"));
+        assertEquals(ChapterParser.getChapterId("1"), ChapterParser.getChapterId("001"));
+        assertEquals(ChapterParser.getChapterId("1.1"), ChapterParser.getChapterId("001-1"));
+    }
+    
 }
