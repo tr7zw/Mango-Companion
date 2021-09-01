@@ -10,26 +10,26 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import dev.tr7zw.mango_companion.crawler.MangatxCrawler;
+import dev.tr7zw.mango_companion.crawler.AsuraScansCrawler;
 import dev.tr7zw.mango_companion.util.ChapterParser;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import dev.tr7zw.mango_companion.util.ZipCreator;
 import lombok.extern.java.Log;
 
 @Log
-public class Mangatx implements Parser {
+public class AsuraScans implements Parser {
 
-    private MangatxCrawler crawler = new MangatxCrawler();
-
+    private AsuraScansCrawler crawler = new AsuraScansCrawler();
+    
     @Override
     public boolean canParse(String url) {
-        return url.startsWith("https://mangatx.com/manga/");
+        return url.startsWith("https://www.asurascans.com/comics/");
     }
 
     @Override
     public Iterator<Chapter> getChapters(FileChecker checker, String url) throws IOException {
         Document doc = crawler.getDocument(url);
-        Elements chapters = doc.getElementsByAttribute("href");
+        Elements chapters = doc.getElementsByClass("chbox");
         return new Iterator<Chapter>() {
 
             int id = chapters.size() - 1;
@@ -39,13 +39,11 @@ public class Mangatx implements Parser {
             public boolean hasNext() {
                 while (id >= 0) { // we start from the bottom and go to the top
                     Element element = chapters.get(id--);
-                    String id = "";
-                    if (element.attr("href").startsWith(url)) {
-                        id = ChapterParser.getChapterId(element.text());
-                    }
+                    element = element.getElementsByAttribute("href").get(0);
+                    String id = ChapterParser.getChapterId(element.text());
                     if (id == null || id.isEmpty())
                         continue;
-                    next = new Chapter(Mangatx.this, element.attr("href"), id);
+                    next = new Chapter(AsuraScans.this, element.attr("href"), id);
                     if (checker.knownChapter(next)) {
                         next = null;
                     } else {
@@ -70,9 +68,9 @@ public class Mangatx implements Parser {
             throw new RuntimeException("Incompatible Chapter to Parser");
         Document doc = crawler.getDocument(chapter.getUrl());
         List<String> urls = new ArrayList<>();
-        for (Element entry : doc.getElementsByClass("wp-manga-chapter-img")) {
-            if (entry.hasAttr("data-src")) {
-                urls.add(entry.attr("data-src").trim());
+        for (Element entry : doc.getElementsByClass("size-full")) {
+            if (entry.hasAttr("loading")) {
+                urls.add(entry.attr("src").trim());
             }
         }
         log.fine("Downloading " + target.getParentFile().getName() + " " + target.getName());
@@ -90,7 +88,7 @@ public class Mangatx implements Parser {
 
     @Override
     public String getName(String url) throws IOException {
-        return crawler.getDocument(url).getElementsByClass("post-title").get(0).text();
+        return crawler.getDocument(url).getElementsByClass("entry-title").get(0).text();
     }
 
 }

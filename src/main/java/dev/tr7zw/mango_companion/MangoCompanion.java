@@ -17,6 +17,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import com.google.common.collect.Sets;
 
+import dev.tr7zw.mango_companion.parser.AsuraScans;
 import dev.tr7zw.mango_companion.parser.Chapter;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.Manganato;
@@ -33,7 +34,7 @@ public class MangoCompanion implements Runnable {
     private static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
     private final File workingDir;
     private final Config config;
-    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new Manganato(), new Mangatx());
+    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new Manganato(), new Mangatx(), new AsuraScans());
 
     // Discord
     private static DiscordApi api = null;
@@ -41,7 +42,7 @@ public class MangoCompanion implements Runnable {
     
     @Override
     public void run() {
-        if(config.getDiscordApiToken() != null && !config.getDiscordApiToken().isBlank() && config.getChannelId() != -1) {
+        if(config.getDiscordApiToken() != null && !config.getDiscordApiToken().isEmpty() && config.getChannelId() != -1) {
             try {
                 api = new DiscordApiBuilder().setToken(config.getDiscordApiToken()).login().join();
                 log.info("Url to add the bot to your Discord: " + api.createBotInvite());
