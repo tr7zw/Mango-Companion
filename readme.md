@@ -31,3 +31,4 @@ The Docker image is configured for the Mango library folder to mounted at ``/lib
 - [``Mangadex``](https://mangadex.org)
 - [``Manganato``](https://manganato.com/)
 - [``MANGATX``](https://mangatx.com/manga/)
+- [``Asura Scans``]https://www.asurascans.com/)
