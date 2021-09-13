@@ -31,6 +31,9 @@ public class Mangadex implements Parser {
     @Override
     public String getName(String url) throws IOException {
         String uri = url.replace("https://mangadex.org/title/", "");
+        if(uri.contains("/")) {
+            uri = uri.substring(0, uri.indexOf('/'));
+        }
         JsonObject manga = crawler.getJson("https://api.mangadex.org/manga/" + uri);
         return manga.getAsJsonObject("data").getAsJsonObject("attributes").getAsJsonObject("title").get(lang)
                 .getAsString();
@@ -38,7 +41,11 @@ public class Mangadex implements Parser {
 
     @Override
     public Iterator<Chapter> getChapters(FileChecker checker, String url) throws IOException {
-        String uri = url.replace("https://mangadex.org/title/", "");
+        String tmp = url.replace("https://mangadex.org/title/", "");
+        if(tmp.contains("/")) {
+            tmp = tmp.substring(0, tmp.indexOf('/'));
+        }
+        String uri = tmp;
         return new Iterator<Chapter>() {
 
             int offset = 0;
@@ -55,13 +62,13 @@ public class Mangadex implements Parser {
                     if (chapterArray != null) {
                         for (; arrayEntry < chapterArray.size(); arrayEntry++) {
                             JsonObject el = chapterArray.get(arrayEntry).getAsJsonObject();
-                            JsonObject data = el.getAsJsonObject().getAsJsonObject("data");
+                            JsonObject data = el.getAsJsonObject();
                             if (!"chapter".equals(data.get("type").getAsString()))
                                 continue;
                             JsonObject attributes = data.getAsJsonObject("attributes");
                             if (!lang.equals(attributes.get("translatedLanguage").getAsString()))
                                 continue;
-                            Chapter chapter = new Chapter(Mangadex.this, url, attributes.get("chapter").getAsString());
+                            Chapter chapter = new Chapter(Mangadex.this, url, attributes.get("chapter").isJsonNull() ? "1" : attributes.get("chapter").getAsString());
                             if (checker.knownChapter(chapter)) {
                                 log.fine("Skipping known chapter " + chapter.getChapterId());
                                 continue;
@@ -90,7 +97,7 @@ public class Mangadex implements Parser {
                     // get the next page data end then restart the new chapter search
                     JsonObject base = crawler.getJson("https://api.mangadex.org/chapter?manga=" + uri + "&offset="
                             + offset + "&limit=" + pageSize);
-                    chapterArray = base.get("results").getAsJsonArray();
+                    chapterArray = base.get("data").getAsJsonArray();
                     if (offset + pageSize >= base.get("total").getAsInt()) {
                         atEnd = true;
                     } else {
