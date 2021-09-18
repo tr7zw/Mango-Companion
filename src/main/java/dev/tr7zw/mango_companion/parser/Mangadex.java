@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -22,18 +24,19 @@ public class Mangadex implements Parser {
     private MangadexCrawler crawler = new MangadexCrawler();
     private String lang = "en";
     private int pageSize = 100;
+    private Pattern uuidPattern = Pattern.compile("([0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12})");
+    private Pattern uriPattern = Pattern.compile("https?://mangadex.org/title/[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}");
 
     @Override
     public boolean canParse(String url) {
-        return url.startsWith("https://mangadex.org/title/");
+        return uriPattern.matcher(url).find();
     }
 
     @Override
     public String getName(String url) throws IOException {
-        String uri = url.replace("https://mangadex.org/title/", "");
-        if(uri.contains("/")) {
-            uri = uri.substring(0, uri.indexOf('/'));
-        }
+        Matcher matcher = uuidPattern.matcher(url);
+        matcher.find();
+        String uri = matcher.group(1);
         JsonObject manga = crawler.getJson("https://api.mangadex.org/manga/" + uri);
         return manga.getAsJsonObject("data").getAsJsonObject("attributes").getAsJsonObject("title").get(lang)
                 .getAsString();
@@ -41,11 +44,9 @@ public class Mangadex implements Parser {
 
     @Override
     public Iterator<Chapter> getChapters(FileChecker checker, String url) throws IOException {
-        String tmp = url.replace("https://mangadex.org/title/", "");
-        if(tmp.contains("/")) {
-            tmp = tmp.substring(0, tmp.indexOf('/'));
-        }
-        String uri = tmp;
+        Matcher matcher = uuidPattern.matcher(url);
+        matcher.find();
+        String uuid = matcher.group(1);
         return new Iterator<Chapter>() {
 
             int offset = 0;
@@ -95,7 +96,7 @@ public class Mangadex implements Parser {
                     if (atEnd)
                         return false; // reached the last page and completed its data
                     // get the next page data end then restart the new chapter search
-                    JsonObject base = crawler.getJson("https://api.mangadex.org/chapter?manga=" + uri + "&offset="
+                    JsonObject base = crawler.getJson("https://api.mangadex.org/chapter?manga=" + uuid + "&offset="
                             + offset + "&limit=" + pageSize);
                     chapterArray = base.get("data").getAsJsonArray();
                     if (offset + pageSize >= base.get("total").getAsInt()) {
