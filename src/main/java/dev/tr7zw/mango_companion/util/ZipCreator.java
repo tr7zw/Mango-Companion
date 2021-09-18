@@ -1,11 +1,14 @@
 package dev.tr7zw.mango_companion.util;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import javax.imageio.ImageIO;
 
 public class ZipCreator implements AutoCloseable{
 
@@ -25,6 +28,11 @@ public class ZipCreator implements AutoCloseable{
             out.write(b, 0, count);
         }
         stream.close();
+    }
+    
+    public void addFile(String name, BufferedImage image) throws IOException {
+        out.putNextEntry(new ZipEntry(name)); 
+        ImageIO.write(image, "PNG", out);
     }
 
     @Override
