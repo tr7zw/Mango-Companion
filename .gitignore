@@ -3,3 +3,4 @@ target/
 .project
 *.prefs
 config.json
+src/main/java/dev/tr7zw/mango_companion/Test.java

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,10 +21,11 @@ import lombok.extern.java.Log;
 public class AsuraScans implements Parser {
 
     private AsuraScansCrawler crawler = new AsuraScansCrawler();
+    private Pattern uriPattern = Pattern.compile("https?://www.asurascans.com/comics/.+");
     
     @Override
     public boolean canParse(String url) {
-        return url.startsWith("https://www.asurascans.com/comics/");
+        return uriPattern.matcher(url).find();
     }
 
     @Override
