@@ -63,25 +63,33 @@ public class MangoCompanion implements Runnable {
             for (String url : config.getUrls()) {
                 try {
                     updateManga(url, updated);
+                    if(String.join("\n", updated).length() > 950) { // Loaded so much that it just fits into a discord message
+                        sendDiscordAndClear(updated);
+                    }
                 } catch (Exception e) {
                     log.log(Level.SEVERE, "Error while updating manga '" + url + "'!", e);
                 }
             }
-            if(targetChannel != null && !updated.isEmpty()) {
-                try {
-                    String text = String.join("\n", updated);
-                    if(text.length() > 1000) {
-                        text = text.substring(0, 1000);
-                    }
-                    targetChannel.sendMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", text)).get();
-                }catch(Exception ex) {
-                    log.log(Level.WARNING, "Error sending Discord message!", ex);
-                }
-            }
+            sendDiscordAndClear(updated);
             try {
                 Thread.sleep(Duration.ofMinutes(config.getSleepInMinutes()).toMillis());
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+    
+    private void sendDiscordAndClear(List<String> updated) {
+        if(targetChannel != null && !updated.isEmpty()) {
+            try {
+                String text = String.join("\n", updated);
+                if(text.length() > 1000) {
+                    text = text.substring(0, 1000);
+                }
+                targetChannel.sendMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", text)).get();
+                updated.clear();
+            }catch(Exception ex) {
+                log.log(Level.WARNING, "Error sending Discord message!", ex);
             }
         }
     }
