@@ -1,98 +1,79 @@
 package dev.tr7zw.mango_companion.parser;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.io.InputStream;
+import java.time.Duration;
 import java.util.List;
+import java.util.regex.Pattern;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import dev.tr7zw.mango_companion.util.APIProxyBuilder;
+import dev.tr7zw.mango_companion.util.EmptyEncoder;
+import dev.tr7zw.mango_companion.util.HTMLPojoDecoder;
+import dev.tr7zw.mango_companion.util.RateLimiter;
+import dev.tr7zw.mango_companion.util.StreamUtil;
+import dev.tr7zw.mango_companion.util.parser.ParsedChapterEntry;
+import dev.tr7zw.mango_companion.util.parser.ParsedChapterPage;
+import dev.tr7zw.mango_companion.util.parser.ParsedMangaInfo;
+import dev.tr7zw.mango_companion.util.parser.StandardLayoutApi;
+import dev.tr7zw.mango_companion.util.parser.StandardLayoutParser;
+import feign.Feign;
+import feign.Param;
+import feign.RequestLine;
+import feign.Retryer;
+import lombok.Getter;
+import pl.droidsonroids.jspoon.annotation.Selector;
 
-import dev.tr7zw.mango_companion.Chapter;
-import dev.tr7zw.mango_companion.crawler.MangatxCrawler;
-import dev.tr7zw.mango_companion.util.ChapterParser;
-import dev.tr7zw.mango_companion.util.FileChecker;
-import dev.tr7zw.mango_companion.util.ZipCreator;
-import dev.tr7zw.mango_companion.util.parser.Parser;
-import lombok.extern.java.Log;
+public class Mangatx extends StandardLayoutParser {
 
-@Log
-public class Mangatx implements Parser {
-
-    private MangatxCrawler crawler = new MangatxCrawler();
-
+    @Getter
+    private Pattern uriPattern = Pattern.compile("https?://mangatx.com/manga/.+");
+    @Getter
+    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://mangatx.com/manga/([a-z-0-9]+)");
+    @Getter
+    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://mangatx.com/manga/[a-z-0-9]+/([a-z-0-9]+)");
+    @Getter
+    private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
+    private ReadManganatoAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder()).addCapability(limiter)
+            .client(StreamUtil.getClient()).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
+            .target(ReadManganatoAPI.class, "https://mangatx.com");
+    @Getter
+    private StandardLayoutApi api = APIProxyBuilder.getProxy(asuraApi::getMangaInfo, asuraApi::getChapterPage);
+    
     @Override
-    public boolean canParse(String url) {
-        return url.startsWith("https://mangatx.com/manga/");
+    public InputStream getStream(RateLimiter limiter, String url) throws IOException {
+        return StreamUtil.getStreamNoReferer(limiter, url);
     }
 
-    @Override
-    public Iterator<Chapter> getChapters(FileChecker checker, String url) throws IOException {
-        Document doc = crawler.getDocument(url);
-        Elements chapters = doc.getElementsByAttribute("href");
-        return new Iterator<Chapter>() {
+    private static interface ReadManganatoAPI {
 
-            int id = chapters.size() - 1;
-            Chapter next = null;
+        @RequestLine("GET /manga/{uuid}/")
+        MangaInfo getMangaInfo(@Param("uuid") String uuid);
 
-            @Override
-            public boolean hasNext() {
-                while (id >= 0) { // we start from the bottom and go to the top
-                    Element element = chapters.get(id--);
-                    String id = "";
-                    if (element.attr("href").startsWith(url)) {
-                        id = ChapterParser.getChapterId(element.text());
-                    }
-                    if (id == null || id.isEmpty())
-                        continue;
-                    next = new Chapter(Mangatx.this, element.attr("href"), id);
-                    if (checker.knownChapter(next)) {
-                        next = null;
-                    } else {
-                        return true;
-                    }
-                }
-                return false;
-            }
+        @RequestLine("GET /manga/{mangaUUID}/{chapterUUID}")
+        ChapterPage getChapterPage(@Param("mangaUUID") String mangaUUID, @Param("chapterUUID") String chapterUUID);
 
-            @Override
-            public Chapter next() {
-                Chapter tmp = next;
-                next = null;
-                return tmp;
-            }
-        };
     }
 
-    @Override
-    public void downloadChapter(File target, Chapter chapter) throws IOException {
-        if (chapter.getParser().getClass() != this.getClass())
-            throw new RuntimeException("Incompatible Chapter to Parser");
-        Document doc = crawler.getDocument(chapter.getUrl());
-        List<String> urls = new ArrayList<>();
-        for (Element entry : doc.getElementsByClass("wp-manga-chapter-img")) {
-            if (entry.hasAttr("data-src")) {
-                urls.add(entry.attr("data-src").trim());
-            }
-        }
-        log.fine("Downloading " + target.getParentFile().getName() + " " + target.getName());
-        int page = 1;
-        try (ZipCreator zip = new ZipCreator(target)) {
-            for (String url : urls) {
-                String fileName = page + url.substring(url.lastIndexOf("."));
-                zip.addFile(fileName, crawler.getStream(url));
-                page++;
-            }
-        } catch (Exception e) {
-            throw new IOException("Error while downloading Chapter " + chapter.getChapterId(), e);
-        }
+    @Getter
+    private static class MangaInfo implements ParsedMangaInfo {
+        @Selector(".post-title")
+        String title;
+        @Selector("li.wp-manga-chapter")
+        ChapterEntry[] chapters;
     }
 
-    @Override
-    public String getName(String url) throws IOException {
-        return crawler.getDocument(url).getElementsByClass("post-title").get(0).text();
+    @Getter
+    private static class ChapterEntry implements ParsedChapterEntry {
+        @Selector(value = "[href]")
+        String chapter;
+        @Selector(value = "[href]", attr = "href")
+        String url;
+    }
+
+    @Getter
+    private static class ChapterPage implements ParsedChapterPage {
+        @Selector(value = ".wp-manga-chapter-img", attr = "data-src")
+        List<String> imageUrls;
     }
 
 }

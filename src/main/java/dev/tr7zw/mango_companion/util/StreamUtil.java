@@ -38,6 +38,19 @@ public class StreamUtil {
         });
     }
     
+    public static InputStream getStreamNoReferer(RateLimiter limiter, String url) throws IOException {
+        try {
+            limiter.getRateLimiter().asScheduler().consume(1);
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
+        return Failsafe.with(retryPolicy).get(() -> {
+            URLConnection connection = new URL(url).openConnection();
+            connection.setRequestProperty("User-Agent", userAgent);
+            return connection.getInputStream(); 
+        });
+    }
+    
     public static OkHttpClient getClient() {
         return new OkHttpClient(new okhttp3.OkHttpClient(new okhttp3.OkHttpClient.Builder().addNetworkInterceptor(new UserAgentInterceptor(userAgent))));
     }

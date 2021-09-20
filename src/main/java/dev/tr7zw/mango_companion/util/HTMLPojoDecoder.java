@@ -19,6 +19,7 @@ public class HTMLPojoDecoder implements Decoder {
     
     @Override
     public Object decode(Response response, Type type) throws IOException, DecodeException, FeignException {
+        @SuppressWarnings("unchecked")
         HtmlAdapter<Object> adapter = jspoon.adapter((Class<Object>)type);
 
         InputStream is = response.body().asInputStream();

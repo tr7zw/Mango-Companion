@@ -2,6 +2,7 @@ package dev.tr7zw.mango_companion.util.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -84,13 +85,21 @@ public abstract class StandardLayoutParser implements Parser {
         int page = 1;
         try (ZipCreator zip = new ZipCreator(target)) {
             for (String url : urls) {
-                String fileName = page + url.substring(url.lastIndexOf("."));
-                zip.addFile(fileName, StreamUtil.getStream(getLimiter(), url));
+                if(url == null || url.trim().isEmpty())continue;
+                String fileName = page + url.trim().substring(url.trim().lastIndexOf("."));
+                zip.addFile(fileName, getStream(getLimiter(), url));
                 page++;
+            }
+            if(page == 1) {// Nothing got downloaded
+                throw new IOException("Unable to locate images in Chapter " + chapter.getChapterId());
             }
         } catch (Exception e) {
             throw new IOException("Error while downloading Chapter " + chapter.getChapterId(), e);
         }
+    }
+    
+    public InputStream getStream(RateLimiter limiter, String url) throws IOException {
+        return StreamUtil.getStream(limiter, url);
     }
     
     protected String getMangaUUID(String url) {
