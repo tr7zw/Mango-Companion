@@ -156,21 +156,21 @@ public class Mangadex implements Parser {
         public MangaData data;
     }
     
-    private static class MangaData {
+    public static class MangaData {
         public String id;
         public String type;
         public Attributes attributes;
     }
     
-    private static class Attributes {
+    public static class Attributes {
         public Map<String, String> title;
     }
     
-    private static enum Result{
+    public static enum Result{
         ok, error
     }
     
-    private static class ChapterResponse {
+    public static class ChapterResponse {
         public Result result;
         public String response;
         public ChapterData[] data;
@@ -179,13 +179,13 @@ public class Mangadex implements Parser {
         public int total;
     }
     
-    private static class ChapterData {
+    public static class ChapterData {
         public String id;
         public String type;
         public ChapterAttributes attributes;
     }
     
-    private static class ChapterAttributes {
+    public static class ChapterAttributes {
         public String volume;
         public String chapter;
         public String title;

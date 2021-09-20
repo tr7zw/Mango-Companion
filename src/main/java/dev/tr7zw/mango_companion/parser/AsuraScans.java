@@ -2,6 +2,7 @@ package dev.tr7zw.mango_companion.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.jsoup.select.Elements;
 import dev.tr7zw.mango_companion.crawler.AsuraScansCrawler;
 import dev.tr7zw.mango_companion.util.ChapterParser;
 import dev.tr7zw.mango_companion.util.FileChecker;
+import dev.tr7zw.mango_companion.util.RateLimiter;
+import dev.tr7zw.mango_companion.util.StreamUtil;
 import dev.tr7zw.mango_companion.util.ZipCreator;
 import lombok.extern.java.Log;
 
@@ -22,6 +25,7 @@ public class AsuraScans implements Parser {
 
     private AsuraScansCrawler crawler = new AsuraScansCrawler();
     private Pattern uriPattern = Pattern.compile("https?://www.asurascans.com/comics/.+");
+    private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
     
     @Override
     public boolean canParse(String url) {
@@ -80,7 +84,7 @@ public class AsuraScans implements Parser {
         try (ZipCreator zip = new ZipCreator(target)) {
             for (String url : urls) {
                 String fileName = page + url.substring(url.lastIndexOf("."));
-                zip.addFile(fileName, crawler.getStream(url));
+                zip.addFile(fileName, StreamUtil.getStream(limiter, url));
                 page++;
             }
         } catch (Exception e) {

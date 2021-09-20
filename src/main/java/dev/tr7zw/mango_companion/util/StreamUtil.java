@@ -3,6 +3,7 @@ package dev.tr7zw.mango_companion.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.time.Duration;
 
 import lombok.extern.java.Log;
@@ -24,7 +25,12 @@ public class StreamUtil {
         } catch (InterruptedException e) {
             throw new IOException(e);
         }
-        return Failsafe.with(retryPolicy).get(() -> new URL(url).openStream());
+        return Failsafe.with(retryPolicy).get(() -> {
+            URLConnection connection = new URL(url).openConnection();
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0");
+            connection.addRequestProperty("Referer", url);
+            return connection.getInputStream(); 
+        });
     }
     
 }
