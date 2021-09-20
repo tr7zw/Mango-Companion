@@ -1,4 +1,4 @@
-package dev.tr7zw.mango_companion.parser;
+package dev.tr7zw.mango_companion.util.parser;
 
 import java.io.File;
 import java.io.IOException;

@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.util.Iterator;
 
 import dev.tr7zw.mango_companion.parser.AsuraScans;
-import dev.tr7zw.mango_companion.parser.Parser;
+import dev.tr7zw.mango_companion.util.parser.Parser;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

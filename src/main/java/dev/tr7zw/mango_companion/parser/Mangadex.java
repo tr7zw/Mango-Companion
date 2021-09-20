@@ -15,6 +15,7 @@ import dev.tr7zw.mango_companion.util.FileChecker;
 import dev.tr7zw.mango_companion.util.RateLimiter;
 import dev.tr7zw.mango_companion.util.StreamUtil;
 import dev.tr7zw.mango_companion.util.ZipCreator;
+import dev.tr7zw.mango_companion.util.parser.Parser;
 import feign.Feign;
 import feign.Param;
 import feign.RequestLine;

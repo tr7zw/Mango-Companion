@@ -21,8 +21,8 @@ import dev.tr7zw.mango_companion.parser.AsuraScans;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.Manganato;
 import dev.tr7zw.mango_companion.parser.Mangatx;
-import dev.tr7zw.mango_companion.parser.Parser;
 import dev.tr7zw.mango_companion.util.FileChecker;
+import dev.tr7zw.mango_companion.util.parser.Parser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 

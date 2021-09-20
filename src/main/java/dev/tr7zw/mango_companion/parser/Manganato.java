@@ -15,6 +15,7 @@ import dev.tr7zw.mango_companion.crawler.ManganatoCrawler;
 import dev.tr7zw.mango_companion.util.ChapterParser;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import dev.tr7zw.mango_companion.util.ZipCreator;
+import dev.tr7zw.mango_companion.util.parser.Parser;
 import lombok.extern.java.Log;
 
 @Log

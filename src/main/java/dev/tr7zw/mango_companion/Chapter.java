@@ -1,6 +1,6 @@
 package dev.tr7zw.mango_companion;
 
-import dev.tr7zw.mango_companion.parser.Parser;
+import dev.tr7zw.mango_companion.util.parser.Parser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
