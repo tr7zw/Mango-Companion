@@ -18,6 +18,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import com.google.common.collect.Sets;
 
 import dev.tr7zw.mango_companion.parser.AsuraScans;
+import dev.tr7zw.mango_companion.parser.Flamescans;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.ReadManganato;
 import dev.tr7zw.mango_companion.parser.Mangatx;
@@ -33,7 +34,7 @@ public class MangoCompanion implements Runnable {
     private static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
     private final File workingDir;
     private final Config config;
-    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans());
+    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans());
 
     // Discord
     private static DiscordApi api = null;

@@ -1,7 +1,5 @@
 package dev.tr7zw.mango_companion.parser;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.Duration;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -23,48 +21,43 @@ import feign.Retryer;
 import lombok.Getter;
 import pl.droidsonroids.jspoon.annotation.Selector;
 
-public class Mangatx extends StandardLayoutParser {
+public class Flamescans extends StandardLayoutParser {
 
     @Getter
-    private Pattern uriPattern = Pattern.compile("https?://mangatx.com/manga/.+");
+    private Pattern uriPattern = Pattern.compile("https?://flamescans.org/series/.+");
     @Getter
-    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://mangatx.com/manga/([a-z-0-9]+)");
+    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://flamescans.org/series/([a-z0-9]+)");
     @Getter
-    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://mangatx.com/manga/[a-z-0-9]+/([a-z-0-9]+)");
+    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://flamescans.org/([a-z-0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
-    private MangatxAPI baseApi = Feign.builder().decoder(new HTMLPojoDecoder()).addCapability(limiter)
+    private FlamescansAPI flamescansApi = Feign.builder().decoder(new HTMLPojoDecoder()).addCapability(limiter)
             .client(StreamUtil.getClient()).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
-            .target(MangatxAPI.class, "https://mangatx.com");
+            .target(FlamescansAPI.class, "https://flamescans.org");
     @Getter
-    private StandardLayoutApi api = APIProxyBuilder.getProxy(baseApi::getMangaInfo, baseApi::getChapterPage);
-    
-    @Override
-    public InputStream getStream(RateLimiter limiter, String url) throws IOException {
-        return StreamUtil.getStreamNoReferer(limiter, url);
-    }
+    private StandardLayoutApi api = APIProxyBuilder.getProxy(flamescansApi::getMangaInfo, flamescansApi::getChapterPage);
 
-    private static interface MangatxAPI {
+    private static interface FlamescansAPI {
 
-        @RequestLine("GET /manga/{uuid}/")
+        @RequestLine("GET /series/{uuid}/")
         MangaInfo getMangaInfo(@Param("uuid") String uuid);
 
-        @RequestLine("GET /manga/{mangaUUID}/{chapterUUID}")
+        @RequestLine("GET /{chapterUUID}/")
         ChapterPage getChapterPage(@Param("mangaUUID") String mangaUUID, @Param("chapterUUID") String chapterUUID);
 
     }
 
     @Getter
     private static class MangaInfo implements ParsedMangaInfo {
-        @Selector(".post-title")
+        @Selector(".entry-title")
         String title;
-        @Selector("li.wp-manga-chapter")
+        @Selector("li[data-num]")
         ChapterEntry[] chapters;
     }
 
     @Getter
     private static class ChapterEntry implements ParsedChapterEntry {
-        @Selector(value = "[href]")
+        @Selector(value = ".chapternum")
         String chapter;
         @Selector(value = "[href]", attr = "href")
         String url;
@@ -72,7 +65,7 @@ public class Mangatx extends StandardLayoutParser {
 
     @Getter
     private static class ChapterPage implements ParsedChapterPage {
-        @Selector(value = ".wp-manga-chapter-img", attr = "data-src")
+        @Selector(value = ".rdminimal img", attr = "src")
         List<String> imageUrls;
     }
 
