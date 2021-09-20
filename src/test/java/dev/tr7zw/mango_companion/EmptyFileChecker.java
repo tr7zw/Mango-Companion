@@ -1,6 +1,5 @@
 package dev.tr7zw.mango_companion;
 
-import dev.tr7zw.mango_companion.parser.Chapter;
 import dev.tr7zw.mango_companion.util.FileChecker;
 
 public class EmptyFileChecker extends FileChecker {

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import dev.tr7zw.mango_companion.Chapter;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import dev.tr7zw.mango_companion.util.RateLimiter;
 import dev.tr7zw.mango_companion.util.StreamUtil;
@@ -151,44 +152,44 @@ public class Mangadex implements Parser {
         public String baseUrl;
     }
     
-    public static class MangaResponse {
-        public Result result;
+    private static class MangaResponse {
+        //public Result result;
         public MangaData data;
     }
     
-    public static class MangaData {
-        public String id;
-        public String type;
+    private static class MangaData {
+        //public String id;
+        //public String type;
         public Attributes attributes;
     }
     
-    public static class Attributes {
+    private static class Attributes {
         public Map<String, String> title;
     }
     
-    public static enum Result{
-        ok, error
-    }
+    //private static enum Result{
+    //    ok, error
+    //}
     
-    public static class ChapterResponse {
-        public Result result;
-        public String response;
+    private static class ChapterResponse {
+        //public Result result;
+        //public String response;
         public ChapterData[] data;
-        public int limit;
-        public int offset;
+        //public int limit;
+        //public int offset;
         public int total;
     }
     
-    public static class ChapterData {
+    private static class ChapterData {
         public String id;
         public String type;
         public ChapterAttributes attributes;
     }
     
-    public static class ChapterAttributes {
-        public String volume;
+    private static class ChapterAttributes {
+        //public String volume;
         public String chapter;
-        public String title;
+        //public String title;
         public String translatedLanguage;
         public String[] data;
         public String hash;

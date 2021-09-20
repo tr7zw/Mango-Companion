@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Iterator;
 
-import dev.tr7zw.mango_companion.parser.Chapter;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.Parser;
 import junit.framework.Test;

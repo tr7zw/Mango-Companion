@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import dev.tr7zw.mango_companion.Chapter;
 import dev.tr7zw.mango_companion.crawler.ManganatoCrawler;
 import dev.tr7zw.mango_companion.util.ChapterParser;
 import dev.tr7zw.mango_companion.util.FileChecker;

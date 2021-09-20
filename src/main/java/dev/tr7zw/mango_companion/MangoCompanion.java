@@ -18,7 +18,6 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import com.google.common.collect.Sets;
 
 import dev.tr7zw.mango_companion.parser.AsuraScans;
-import dev.tr7zw.mango_companion.parser.Chapter;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.Manganato;
 import dev.tr7zw.mango_companion.parser.Mangatx;

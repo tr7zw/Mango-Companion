@@ -3,7 +3,7 @@ package dev.tr7zw.mango_companion.util;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import dev.tr7zw.mango_companion.parser.Chapter;
+import dev.tr7zw.mango_companion.Chapter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

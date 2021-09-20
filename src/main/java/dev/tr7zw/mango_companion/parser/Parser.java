@@ -3,6 +3,8 @@ package dev.tr7zw.mango_companion.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+
+import dev.tr7zw.mango_companion.Chapter;
 import dev.tr7zw.mango_companion.util.FileChecker;
 
 public interface Parser {
