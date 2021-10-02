@@ -30,7 +30,7 @@ public class Mangadex implements Parser {
     private int pageSize = 100;
     private Pattern uuidPattern = Pattern.compile("([0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12})");
     private Pattern uriPattern = Pattern.compile("https?://mangadex.org/title/[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}");
-    private RateLimiter limiter = new RateLimiter(3, Duration.ofSeconds(1));
+    private RateLimiter limiter = new RateLimiter(1, Duration.ofSeconds(1));
     private MangadexAPI api = Feign.builder()
             .decoder(new GsonDecoder())
             .addCapability(limiter)
@@ -135,6 +135,12 @@ public class Mangadex implements Parser {
         } catch (Exception e) {
             throw new IOException(e);
         }
+    }
+    
+    @Override
+    public List<String> getImages(Chapter chapter) throws IOException {
+        List<String> data = (List<String>) chapter.getParserData();
+        return data;
     }
 
     private static interface MangadexAPI {

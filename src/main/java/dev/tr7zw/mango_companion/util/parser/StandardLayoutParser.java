@@ -80,7 +80,7 @@ public abstract class StandardLayoutParser implements Parser {
     public void downloadChapter(File target, Chapter chapter) throws IOException {
         if (chapter.getParser().getClass() != this.getClass())
             throw new RuntimeException("Incompatible Chapter to Parser");
-        List<String> urls = getChapterUrls(chapter.getUrl());
+        List<String> urls = getImages(chapter);
         log.fine("Downloading " + target.getParentFile().getName() + " " + target.getName());
         int page = 1;
         try (ZipCreator zip = new ZipCreator(target)) {
@@ -96,6 +96,11 @@ public abstract class StandardLayoutParser implements Parser {
         } catch (Exception e) {
             throw new IOException("Error while downloading Chapter " + chapter.getChapterId(), e);
         }
+    }
+    
+    @Override
+    public List<String> getImages(Chapter chapter) throws IOException {
+        return getChapterUrls(chapter.getUrl());
     }
     
     public InputStream getStream(RateLimiter limiter, String url) throws IOException {

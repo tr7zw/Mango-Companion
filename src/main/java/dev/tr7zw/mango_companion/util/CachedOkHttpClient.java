@@ -23,6 +23,7 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -33,6 +34,7 @@ import org.ehcache.config.builders.ResourcePoolsBuilder;
 
 import feign.Client;
 import feign.Request.HttpMethod;
+import lombok.extern.java.Log;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -49,6 +51,7 @@ import okhttp3.ResponseBody;
  * GitHub github = Feign.builder().client(new OkHttpClient()).target(GitHub.class,
  * "https://api.github.com");
  */
+@Log
 public final class CachedOkHttpClient implements Client {
 
     private static CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build(true);
@@ -178,7 +181,7 @@ public final class CachedOkHttpClient implements Client {
   public feign.Response execute(feign.Request input, feign.Request.Options options)
       throws IOException {
       if(myCache.containsKey(input.url()) && input.length() == 0 && input.httpMethod() == HttpMethod.GET) {
-          System.out.println("Cached response for " +  input.url());
+          log.log(Level.FINE, "Cached response for " +  input.url());
           return myCache.get(input.url());
       }
     okhttp3.OkHttpClient requestScoped;

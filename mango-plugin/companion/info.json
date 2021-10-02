@@ -1,0 +1,8 @@
+{
+	"id": "companion",
+	"title": "Mango-Companion",
+	"author": "tr7zw",
+	"version": "v1.0",
+	"placeholder": "Manga url",
+	"wait_seconds": 5
+}

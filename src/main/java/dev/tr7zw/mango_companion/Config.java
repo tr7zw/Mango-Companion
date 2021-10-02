@@ -15,4 +15,5 @@ public class Config {
     private int sleepInMinutes = 60;
     private String discordApiToken = "";
     private long channelId = -1;
+    private int apiPort = 25544;
 }
