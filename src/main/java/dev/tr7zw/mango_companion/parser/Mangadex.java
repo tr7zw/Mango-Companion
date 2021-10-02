@@ -35,6 +35,7 @@ public class Mangadex implements Parser {
             .decoder(new GsonDecoder())
             .addCapability(limiter)
             .retryer(new Retryer.Default(1000, 1000, 3))
+            .client(StreamUtil.getClient())
             .target(MangadexAPI.class, "https://api.mangadex.org");
     
     private String getUUID(String url) {

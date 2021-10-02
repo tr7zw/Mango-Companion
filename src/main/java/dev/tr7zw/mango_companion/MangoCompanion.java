@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +16,6 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
-
-import com.google.common.collect.Sets;
 
 import dev.tr7zw.mango_companion.parser.AsuraScans;
 import dev.tr7zw.mango_companion.parser.Flamescans;
@@ -34,7 +34,7 @@ public class MangoCompanion implements Runnable {
     private static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
     private final File workingDir;
     private final Config config;
-    private Set<Parser> parsers = Sets.newHashSet(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans());
+    private Set<Parser> parsers = new HashSet<>(Arrays.asList(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans()));
 
     // Discord
     private static DiscordApi api = null;
