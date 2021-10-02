@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import dev.tr7zw.mango_companion.parser.AsuraScans;
+import dev.tr7zw.mango_companion.parser.Bilibilicomics;
 import dev.tr7zw.mango_companion.parser.Flamescans;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.Mangatx;
@@ -31,7 +32,7 @@ public class MangoCompanion implements Runnable {
     private static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
     private final File workingDir;
     @Getter
-    private Set<Parser> parsers = new HashSet<>(Arrays.asList(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans()));
+    private Set<Parser> parsers = new HashSet<>(Arrays.asList(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans(), new Bilibilicomics()));
     
     @Override
     public void run() {
