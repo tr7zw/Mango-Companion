@@ -51,7 +51,7 @@ public class StreamUtil {
 
     public static Client getClient() {
         return new CachedOkHttpClient(new okhttp3.OkHttpClient(new okhttp3.OkHttpClient.Builder()
-                .addNetworkInterceptor(new UserAgentInterceptor(userAgent)).connectTimeout(Duration.ofSeconds(20))));
+                .addNetworkInterceptor(new UserAgentInterceptor(userAgent)).connectTimeout(Duration.ofSeconds(20)).readTimeout(Duration.ofSeconds(60))));
     }
 
     private static class UserAgentInterceptor implements Interceptor {
