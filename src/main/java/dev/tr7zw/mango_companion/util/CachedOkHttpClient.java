@@ -61,13 +61,15 @@ public final class CachedOkHttpClient implements Client {
                                           ResourcePoolsBuilder.heap(50)).withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(10))).build());
     
   private final okhttp3.OkHttpClient delegate;
+  private final RateLimiter rateLimiter;
 
-  public CachedOkHttpClient() {
-    this(new okhttp3.OkHttpClient());
+  public CachedOkHttpClient(RateLimiter rateLimiter) {
+    this(rateLimiter, new okhttp3.OkHttpClient());
   }
 
-  public CachedOkHttpClient(okhttp3.OkHttpClient delegate) {
+  public CachedOkHttpClient(RateLimiter rateLimiter, okhttp3.OkHttpClient delegate) {
     this.delegate = delegate;
+    this.rateLimiter = rateLimiter;
   }
 
   static Request toOkHttpRequest(feign.Request input) {
@@ -184,6 +186,7 @@ public final class CachedOkHttpClient implements Client {
           log.log(Level.FINE, "Cached response for " +  input.url());
           return myCache.get(input.url());
       }
+      rateLimiter.consume();
     okhttp3.OkHttpClient requestScoped;
     if (delegate.connectTimeoutMillis() != options.connectTimeoutMillis()
         || delegate.readTimeoutMillis() != options.readTimeoutMillis()

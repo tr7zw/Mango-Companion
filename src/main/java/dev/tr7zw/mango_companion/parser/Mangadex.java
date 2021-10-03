@@ -30,12 +30,11 @@ public class Mangadex implements Parser {
     private int pageSize = 100;
     private Pattern uuidPattern = Pattern.compile("([0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12})");
     private Pattern uriPattern = Pattern.compile("https?://mangadex.org/title/[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}");
-    private RateLimiter limiter = new RateLimiter(1, Duration.ofSeconds(1));
+    private RateLimiter limiter = new RateLimiter(2, Duration.ofSeconds(1));
     private MangadexAPI api = Feign.builder()
             .decoder(new GsonDecoder())
-            .addCapability(limiter)
             .retryer(new Retryer.Default(1000, 1000, 3))
-            .client(StreamUtil.getClient())
+            .client(StreamUtil.getClient(limiter))
             .target(MangadexAPI.class, "https://api.mangadex.org");
     
     private String getUUID(String url) {
@@ -82,7 +81,7 @@ public class Mangadex implements Parser {
                             continue;
                         }
                         List<String> images = new ArrayList<>();
-                        String serverUrl = api.getHost(data.id).baseUrl;
+                        String serverUrl = "https://uploads.mangadex.org"; //api.getHost(data.id).baseUrl; // This is currently a fixed value so dont get that data
                         for (String page : data.attributes.data) {
                             images.add(serverUrl + "/data/" + data.attributes.hash + "/" + page);
                         }

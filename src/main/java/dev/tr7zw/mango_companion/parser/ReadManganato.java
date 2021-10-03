@@ -31,8 +31,8 @@ public class ReadManganato extends StandardLayoutParser {
     private Pattern chapterUriUUIDPattern = Pattern.compile("https?://readmanganato.com/manga-[a-z0-9]+/([a-z-0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
-    private ReadManganatoAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder()).addCapability(limiter)
-            .client(StreamUtil.getClient()).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
+    private ReadManganatoAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder())
+            .client(StreamUtil.getClient(limiter)).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
             .target(ReadManganatoAPI.class, "https://readmanganato.com");
     @Getter
     private StandardLayoutApi api = APIProxyBuilder.getProxy(asuraApi::getMangaInfo, asuraApi::getChapterPage);

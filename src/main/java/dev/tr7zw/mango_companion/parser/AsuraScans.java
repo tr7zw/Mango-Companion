@@ -31,8 +31,8 @@ public class AsuraScans extends StandardLayoutParser {
     private Pattern chapterUriUUIDPattern = Pattern.compile("https?://www.asurascans.com/([a-z-0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
-    private AsuraScansAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder()).addCapability(limiter)
-            .client(StreamUtil.getClient()).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
+    private AsuraScansAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder())
+            .client(StreamUtil.getClient(limiter)).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
             .target(AsuraScansAPI.class, "https://www.asurascans.com");
     @Getter
     private StandardLayoutApi api = APIProxyBuilder.getProxy(asuraApi::getMangaInfo, asuraApi::getChapterPage);

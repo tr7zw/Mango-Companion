@@ -31,8 +31,8 @@ public class Flamescans extends StandardLayoutParser {
     private Pattern chapterUriUUIDPattern = Pattern.compile("https?://flamescans.org/([a-z-0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
-    private FlamescansAPI flamescansApi = Feign.builder().decoder(new HTMLPojoDecoder()).addCapability(limiter)
-            .client(StreamUtil.getClient()).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
+    private FlamescansAPI flamescansApi = Feign.builder().decoder(new HTMLPojoDecoder())
+            .client(StreamUtil.getClient(limiter)).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
             .target(FlamescansAPI.class, "https://flamescans.org");
     @Getter
     private StandardLayoutApi api = APIProxyBuilder.getProxy(flamescansApi::getMangaInfo, flamescansApi::getChapterPage);

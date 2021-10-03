@@ -35,8 +35,8 @@ public abstract class AbstractMadaraParser extends StandardLayoutParser {
     private Pattern mangaShortUUIDPattern = Pattern.compile(getUrlPatter() + "/\\?p=([0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
-    private MadaraAPI baseApi = Feign.builder().decoder(new HTMLPojoDecoder()).addCapability(limiter)
-            .client(StreamUtil.getClient()).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
+    private MadaraAPI baseApi = Feign.builder().decoder(new HTMLPojoDecoder())
+            .client(StreamUtil.getClient(limiter)).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
             .target(getTarget());
     @Getter
     private StandardLayoutApi api = APIProxyBuilder.getProxy(baseApi::getMangaInfo, baseApi::getChapterPage);

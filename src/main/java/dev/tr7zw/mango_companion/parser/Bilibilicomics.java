@@ -33,8 +33,8 @@ public class Bilibilicomics extends StandardLayoutParser {
     private Pattern chapterUriUUIDPattern = Pattern.compile("https://www.bilibilicomics.com/mc[0-9]+/([0-9]+)");
 
     private static RateLimiter limiter = new RateLimiter(1, Duration.ofSeconds(1));
-    private static BilibilicomicsAPI bilibilicomicsApi = Feign.builder().decoder(new GsonDecoder()).addCapability(limiter)
-            .client(StreamUtil.getClient()).encoder(new GsonEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
+    private static BilibilicomicsAPI bilibilicomicsApi = Feign.builder().decoder(new GsonDecoder())
+            .client(StreamUtil.getClient(limiter)).encoder(new GsonEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
             .target(BilibilicomicsAPI.class, "https://www.bilibilicomics.com");
     @Getter
     private StandardLayoutApi api = APIProxyBuilder.getProxy(bilibilicomicsApi::getMangaInfo, bilibilicomicsApi::getChapterPage);
