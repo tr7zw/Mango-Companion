@@ -26,7 +26,7 @@ public class Flamescans extends StandardLayoutParser {
     @Getter
     private Pattern uriPattern = Pattern.compile("https?://flamescans.org/series/.+");
     @Getter
-    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://flamescans.org/series/([a-z0-9]+)");
+    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://flamescans.org/series/([a-z-0-9]+)");
     @Getter
     private Pattern chapterUriUUIDPattern = Pattern.compile("https?://flamescans.org/([a-z-0-9]+)");
     @Getter
