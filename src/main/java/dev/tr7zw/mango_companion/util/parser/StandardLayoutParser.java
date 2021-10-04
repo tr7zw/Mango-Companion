@@ -87,6 +87,9 @@ public abstract class StandardLayoutParser implements Parser {
             for (String url : urls) {
                 if(url == null || url.trim().isEmpty())continue;
                 String fileName = page + url.trim().substring(url.trim().lastIndexOf("."));
+                if(fileName.indexOf('?') != -1) {
+                    fileName = fileName.substring(0, fileName.indexOf('?'));
+                }
                 zip.addFile(fileName, getStream(getLimiter(), url));
                 page++;
             }

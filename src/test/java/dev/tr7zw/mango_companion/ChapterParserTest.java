@@ -75,6 +75,11 @@ public class ChapterParserTest extends TestCase {
         assertEquals("300.12", ChapterParser.getChapterId("Chapter-300.12.zip"));
         assertEquals("300.12", ChapterParser.getChapterId("Chapter.300.12.zip"));
     }
+    
+    public void testWeirdFormat() {
+        assertEquals("1.1", ChapterParser.getChapterId("001-1"));
+        assertEquals("1.2", ChapterParser.getChapterId("001-2"));
+    }
 
     public void testUrls() {
         assertEquals("180.1", ChapterParser.getChapterId("https://example.com/manga/manga-name/chapter-180-1/"));
