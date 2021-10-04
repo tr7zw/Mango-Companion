@@ -63,7 +63,8 @@ public class MangoCompanion implements Runnable {
         if(text.length() > 1000) {
             text = text.substring(0, 1000);
         }
-        App.getDiscord().sendUpdateMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", text));
+        if(!text.isEmpty())
+            App.getDiscord().sendUpdateMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", text));
         updated.clear();
     }
 
