@@ -13,7 +13,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<wicket.version>8.13.0</wicket.version>
+		<wicket.version>9.6.0</wicket.version>
         <jetty9.version>9.4.43.v20210629</jetty9.version>
         <slf4j.version>1.7.32</slf4j.version>
 	</properties>
