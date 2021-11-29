@@ -14,7 +14,7 @@ jobs:
       with:
         java-version: 8
     - name: Build with Maven
-      run: mvn package --file pom.xml
+      run: mvn package --file pom.xml -Dmaven.test.skip=true
     - name: Upload Artifact
       uses: actions/upload-artifact@v2-preview
       with:
