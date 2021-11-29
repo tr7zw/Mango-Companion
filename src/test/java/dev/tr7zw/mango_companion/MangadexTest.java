@@ -52,7 +52,7 @@ public class MangadexTest extends TestCase {
     
     public void testChapters() throws IOException {
         Parser parser = new Mangadex();
-        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://mangadex.org/title/32d76d19-8a05-4db0-9fc2-e0b0648fe9d0/");
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://mangadex.org/title/a31a3214-1e1c-4079-b216-e894d20e26cd/d-c-ii-da-capo-ii-imaginary-future"); // pressed random till something came up that probably wont get updates
         assertTrue(iterator.hasNext());
         Chapter chapter = iterator.next();
         assertNotNull(chapter);
