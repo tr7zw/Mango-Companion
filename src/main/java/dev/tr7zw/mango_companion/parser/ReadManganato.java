@@ -28,7 +28,7 @@ public class ReadManganato extends StandardLayoutParser {
     @Getter
     private Pattern mangaUriUUIDPattern = Pattern.compile("https?://readmanganato.com/manga-([a-z0-9]+)");
     @Getter
-    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://readmanganato.com/manga-[a-z0-9]+/([a-z-0-9]+)");
+    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://readmanganato.com/manga-[a-z0-9]+/([a-z-0-9\\.]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
     private ReadManganatoAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder())

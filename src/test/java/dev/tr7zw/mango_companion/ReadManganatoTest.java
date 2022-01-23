@@ -41,19 +41,38 @@ public class ReadManganatoTest extends TestCase {
         assertFalse(parser.canParse("https://manganato.com/genre-all"));
         assertFalse(parser.canParse("https://manganato.com/genre-all?type=newest"));
     }
-    
+
     public void testName() throws IOException {
         Parser parser = new ReadManganato();
         assertEquals("Solo Leveling", parser.getName("https://readmanganato.com/manga-dr980474/"));
     }
-    
+
     public void testChapters() throws IOException {
         Parser parser = new ReadManganato();
-        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://readmanganato.com/manga-dr980474/");
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(),
+                "https://readmanganato.com/manga-dr980474/");
         assertTrue(iterator.hasNext());
         Chapter chapter = iterator.next();
         assertNotNull(chapter);
         assertEquals("0", chapter.getChapterId());
+        parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+    }
+
+    public void testChapters2() throws IOException {
+        Parser parser = new ReadManganato();
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(),
+                "https://readmanganato.com/manga-jn986622");
+        assertTrue(iterator.hasNext());
+        Chapter chapter = iterator.next();
+        while (!chapter.getChapterId().equals("12.1")) {
+            if (iterator.hasNext()) {
+                chapter = iterator.next();
+            } else {
+                fail();
+            }
+        }
+        assertNotNull(chapter);
+        assertEquals("12.1", chapter.getChapterId());
         parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
     }
 
