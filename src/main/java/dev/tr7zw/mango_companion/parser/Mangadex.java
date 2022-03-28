@@ -81,9 +81,10 @@ public class Mangadex implements Parser {
                             continue;
                         }
                         List<String> images = new ArrayList<>();
-                        String serverUrl = "https://uploads.mangadex.org"; //api.getHost(data.id).baseUrl; // This is currently a fixed value so dont get that data
-                        for (String page : data.attributes.data) {
-                            images.add(serverUrl + "/data/" + data.attributes.hash + "/" + page);
+                        ServerLocation loc = api.getHost(data.id);
+                        String serverUrl = loc.baseUrl; //api.getHost(data.id).baseUrl; // This is currently a fixed value so dont get that data
+                        for (String page : loc.chapter.data) {
+                            images.add(serverUrl + "/data/" + loc.chapter.hash + "/" + page);
                         }
                         chapter.setParserData(images);
                         next = chapter;
@@ -157,6 +158,12 @@ public class Mangadex implements Parser {
     
     private static class ServerLocation {
         public String baseUrl;
+        public ChapterLinks chapter;
+    }
+    
+    private static class ChapterLinks {
+        public String hash;
+        public String[] data;
     }
     
     private static class MangaResponse {
@@ -198,8 +205,6 @@ public class Mangadex implements Parser {
         public String chapter;
         //public String title;
         public String translatedLanguage;
-        public String[] data;
-        public String hash;
     }
     
 }

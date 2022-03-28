@@ -204,6 +204,9 @@ public final class CachedOkHttpClient implements Client {
     feign.Response resp = toFeignResponse(response, input).toBuilder().request(input).build();
     if(input.length() == 0 && input.httpMethod() == HttpMethod.GET) {
         myCache.put(input.url(), resp);
+//        if(input.url().contains("/chapter?")) {
+//            resp.body().asInputStream().transferTo(System.out);
+//        }
     }
     return resp;
   }
