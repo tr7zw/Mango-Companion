@@ -11,11 +11,9 @@ import lombok.ToString;
 @Getter
 public class Chapter {
 
-    private final Parser parser;
-    private final String url;
-    private final String chapterId;
-    
-    @Setter
-    private Object parserData;
-    
+  private final Parser parser;
+  private final String url;
+  private final String chapterId;
+
+  @Setter private Object parserData;
 }

@@ -4,6 +4,5 @@ import java.util.List;
 
 public interface ParsedChapterPage {
 
-    public List<String> getImageUrls();
-    
+  public List<String> getImageUrls();
 }

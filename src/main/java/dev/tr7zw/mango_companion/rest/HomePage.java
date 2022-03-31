@@ -6,13 +6,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class HomePage extends WebPage {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public HomePage(final PageParameters parameters) {
-        super(parameters);
+  public HomePage(final PageParameters parameters) {
+    super(parameters);
 
-        add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
-
-    }
-    
+    add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
+  }
 }
