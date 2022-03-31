@@ -7,19 +7,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.imageio.ImageIO;
 
-public class ZipCreator implements AutoCloseable{
+public class ZipCreator implements AutoCloseable {
 
     private ZipOutputStream out;
-    
+
     public ZipCreator(File outputFile) throws IOException {
         out = new ZipOutputStream(new FileOutputStream(outputFile));
     }
-    
+
     public void addFile(String name, InputStream stream) throws IOException {
-        out.putNextEntry(new ZipEntry(name)); 
+        out.putNextEntry(new ZipEntry(name));
         // buffer size
         byte[] b = new byte[1024];
         int count;
@@ -29,9 +28,9 @@ public class ZipCreator implements AutoCloseable{
         }
         stream.close();
     }
-    
+
     public void addFile(String name, BufferedImage image) throws IOException {
-        out.putNextEntry(new ZipEntry(name)); 
+        out.putNextEntry(new ZipEntry(name));
         ImageIO.write(image, "PNG", out);
     }
 
@@ -39,5 +38,4 @@ public class ZipCreator implements AutoCloseable{
     public void close() throws Exception {
         out.close();
     }
-    
 }

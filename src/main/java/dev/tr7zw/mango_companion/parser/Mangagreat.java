@@ -19,5 +19,4 @@ public class Mangagreat extends AbstractMadaraParser implements MadaraSite {
     public String url() {
         return "https://mangagreat.com";
     }
-
 }

@@ -1,18 +1,15 @@
 package dev.tr7zw.mango_companion.rest;
 
+import dev.tr7zw.mango_companion.App;
 import java.lang.management.ManagementFactory;
-
 import javax.management.MBeanServer;
-
+import lombok.Getter;
 import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
-
-import dev.tr7zw.mango_companion.App;
-import lombok.Getter;
 
 @Getter
 public class WebserverManager {

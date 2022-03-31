@@ -1,10 +1,9 @@
 package dev.tr7zw.mango_companion.util;
 
-import java.time.Duration;
-
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Bucket4j;
+import java.time.Duration;
 
 public class RateLimiter {
 
@@ -20,5 +19,4 @@ public class RateLimiter {
         } catch (InterruptedException e) {
         }
     }
-
 }

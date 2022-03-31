@@ -1,20 +1,16 @@
 package dev.tr7zw.mango_companion;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Iterator;
-
 import dev.tr7zw.mango_companion.parser.AsuraScans;
 import dev.tr7zw.mango_companion.util.EmptyFileChecker;
 import dev.tr7zw.mango_companion.util.parser.Parser;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Iterator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/**
- * Validate that AsuraScans is working
- *
- */
+/** Validate that AsuraScans is working */
 public class AsuraScansTest extends TestCase {
 
     /**
@@ -26,9 +22,7 @@ public class AsuraScansTest extends TestCase {
         super(testName);
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
+    /** @return the suite of tests being tested */
     public static Test suite() {
         return new TestSuite(AsuraScansTest.class);
     }
@@ -41,20 +35,25 @@ public class AsuraScansTest extends TestCase {
         assertFalse(parser.canParse("https://www.asurascans.com/comics"));
         assertFalse(parser.canParse("http://www.asurascans.com/random"));
     }
-    
+
     public void testName() throws IOException {
         Parser parser = new AsuraScans();
-        assertEquals("I Grow Stronger By Eating!", parser.getName("https://www.asurascans.com/comics/i-grow-stronger-by-eating/"));
+        assertEquals(
+                "I Grow Stronger By Eating!",
+                parser.getName("https://www.asurascans.com/comics/i-grow-stronger-by-eating/"));
     }
-    
+
     public void testChapters() throws IOException {
         Parser parser = new AsuraScans();
-        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://www.asurascans.com/comics/i-grow-stronger-by-eating/");
+        Iterator<Chapter> iterator =
+                parser.getChapters(
+                        new EmptyFileChecker(),
+                        "https://www.asurascans.com/comics/i-grow-stronger-by-eating/");
         assertTrue(iterator.hasNext());
         Chapter chapter = iterator.next();
         assertNotNull(chapter);
         assertEquals("1", chapter.getChapterId());
-        parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+        parser.downloadChapter(
+                Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
     }
-
 }

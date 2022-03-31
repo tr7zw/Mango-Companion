@@ -12,5 +12,4 @@ public class EmptyFileChecker extends FileChecker {
     public boolean knownChapter(Chapter chapter) {
         return false;
     }
-
 }
