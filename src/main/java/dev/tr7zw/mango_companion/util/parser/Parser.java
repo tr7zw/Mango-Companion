@@ -16,7 +16,7 @@ public interface Parser {
     
     public List<String> getImages(Chapter chapter) throws IOException;
     
-    public void downloadChapter(File target, Chapter chapter) throws IOException;
+    public int downloadChapter(File target, Chapter chapter) throws IOException;
     
     public String getName(String url) throws IOException;
     

@@ -54,7 +54,19 @@ public class AsuraScansTest extends TestCase {
         Chapter chapter = iterator.next();
         assertNotNull(chapter);
         assertEquals("1", chapter.getChapterId());
-        parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+        int pages = parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+    }
+    
+    public void testSpecial() throws IOException {
+        Parser parser = new AsuraScans();
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://www.asurascans.com/comics/367-reincarnation-of-the-suicidal-battle-god/");
+        while(iterator.hasNext()) {
+            Chapter chapter = iterator.next();
+            if("47".equals(chapter.getChapterId())) {
+                int pages = parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+                assertTrue("Expected more than 5 pages. Pages: " + pages,pages > 5);
+            }
+        }
     }
 
 }

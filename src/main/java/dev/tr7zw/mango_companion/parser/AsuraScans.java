@@ -65,7 +65,7 @@ public class AsuraScans extends StandardLayoutParser {
 
     @Getter
     private static class ChapterPage implements ParsedChapterPage {
-        @Selector(value = ".size-full[loading]", attr = "src")
+        @Selector(value = ".alignnone", attr = "src")
         List<String> imageUrls;
     }
 

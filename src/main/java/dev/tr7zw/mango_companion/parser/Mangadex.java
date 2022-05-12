@@ -119,7 +119,7 @@ public class Mangadex implements Parser {
     }
 
     @Override
-    public void downloadChapter(File target, Chapter chapter) throws IOException {
+    public int downloadChapter(File target, Chapter chapter) throws IOException {
         if (chapter.getParser().getClass() != this.getClass())
             throw new RuntimeException("Incompatible Chapter to Parser");
         log.fine("Downloading " + target.getParentFile().getName() + " " + target.getName());
@@ -135,6 +135,7 @@ public class Mangadex implements Parser {
         } catch (Exception e) {
             throw new IOException(e);
         }
+        return page;
     }
     
     @Override

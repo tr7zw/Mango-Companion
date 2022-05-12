@@ -77,7 +77,7 @@ public abstract class StandardLayoutParser implements Parser {
     }
     
     @Override
-    public void downloadChapter(File target, Chapter chapter) throws IOException {
+    public int downloadChapter(File target, Chapter chapter) throws IOException {
         if (chapter.getParser().getClass() != this.getClass())
             throw new RuntimeException("Incompatible Chapter to Parser");
         List<String> urls = getImages(chapter);
@@ -100,6 +100,7 @@ public abstract class StandardLayoutParser implements Parser {
         } catch (Exception e) {
             throw new IOException("Error while downloading Chapter " + chapter.getChapterId(), e);
         }
+        return page;
     }
     
     @Override
