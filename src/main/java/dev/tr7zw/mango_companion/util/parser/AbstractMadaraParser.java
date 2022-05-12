@@ -32,6 +32,7 @@ public abstract class AbstractMadaraParser extends StandardLayoutParser {
     private Pattern mangaUriUUIDPattern = Pattern.compile(getUrlPatter() + "/manga/([a-z-0-9]+)");
     @Getter
     private Pattern chapterUriUUIDPattern = Pattern.compile(getUrlPatter() + "/manga/[a-z-0-9]+/([a-z-0-9]+)");
+    @Getter
     private Pattern mangaShortUUIDPattern = Pattern.compile(getUrlPatter() + "/\\?p=([0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
