@@ -1,6 +1,7 @@
 package dev.tr7zw.mango_companion.parser;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -65,7 +66,7 @@ public class AsuraScans extends StandardLayoutParser {
 
     @Getter
     private static class ChapterPage implements ParsedChapterPage {
-        @Selector(value = ".alignnone", attr = "src")
+        @Selector(value = ".alignnone , .aligncenter", attr = "src")
         List<String> imageUrls;
     }
 

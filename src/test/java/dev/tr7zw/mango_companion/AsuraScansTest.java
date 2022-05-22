@@ -54,7 +54,7 @@ public class AsuraScansTest extends TestCase {
         Chapter chapter = iterator.next();
         assertNotNull(chapter);
         assertEquals("1", chapter.getChapterId());
-        int pages = parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+        parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
     }
     
     public void testSpecial() throws IOException {
@@ -68,5 +68,18 @@ public class AsuraScansTest extends TestCase {
             }
         }
     }
+    
+    public void testSpecial2() throws IOException {
+        Parser parser = new AsuraScans();
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://www.asurascans.com/comics/the-game-that-i-came-from/");
+        while(iterator.hasNext()) {
+            Chapter chapter = iterator.next();
+            if("92".equals(chapter.getChapterId())) {
+                int pages = parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+                assertTrue("Expected more than 5 pages. Pages: " + pages,pages > 5);
+            }
+        }
+    }
+
 
 }
