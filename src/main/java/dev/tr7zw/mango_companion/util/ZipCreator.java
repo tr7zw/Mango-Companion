@@ -30,6 +30,11 @@ public class ZipCreator implements AutoCloseable{
         stream.close();
     }
     
+    public void addFile(String name, byte[] data) throws IOException {
+        out.putNextEntry(new ZipEntry(name)); 
+        out.write(data);
+    }
+    
     public void addFile(String name, BufferedImage image) throws IOException {
         out.putNextEntry(new ZipEntry(name)); 
         ImageIO.write(image, "PNG", out);
