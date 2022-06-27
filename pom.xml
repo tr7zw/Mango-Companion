@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-gson</artifactId>
-			<version>11.8</version>
+			<version>11.9</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
@@ -126,7 +126,7 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-gson</artifactId>
-            <version>11.8</version>
+            <version>11.9</version>
         </dependency>
         <!-- LOGGING DEPENDENCIES - SLF4J-SIMPLE -->
         <dependency>
