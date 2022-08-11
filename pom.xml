@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>org.javacord</groupId>
 			<artifactId>javacord</artifactId>
-			<version>3.4.0</version>
+			<version>3.5.0</version>
 			<type>pom</type>
 		</dependency>
 		<dependency>
@@ -58,7 +58,7 @@
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.15.1</version>
+			<version>1.15.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -68,17 +68,17 @@
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-core</artifactId>
-			<version>11.8</version>
+			<version>11.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-gson</artifactId>
-			<version>11.8</version>
+			<version>11.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-okhttp</artifactId>
-			<version>11.8</version>
+			<version>11.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ehcache</groupId>
@@ -121,12 +121,12 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
-            <version>11.8</version>
+            <version>11.9.1</version>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-gson</artifactId>
-            <version>11.8</version>
+            <version>11.9.1</version>
         </dependency>
         <!-- LOGGING DEPENDENCIES - SLF4J-SIMPLE -->
         <dependency>
@@ -161,7 +161,7 @@
 
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.4.2</version>
 				<configuration>
 					<archive>
 						<manifest>
