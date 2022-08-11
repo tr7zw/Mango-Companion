@@ -35,6 +35,7 @@ public class AsuraScansTest extends TestCase {
 
     public void testUrls() {
         Parser parser = new AsuraScans();
+        assertTrue(parser.canParse("https://www.asurascans.com/manga/damn-reincarnation/"));
         assertTrue(parser.canParse("https://www.asurascans.com/comics/i-grow-stronger-by-eating/"));
         assertTrue(parser.canParse("http://www.asurascans.com/comics/i-grow-stronger-by-eating"));
         assertFalse(parser.canParse("http://www.asurascans.com/comics/"));
@@ -45,11 +46,22 @@ public class AsuraScansTest extends TestCase {
     public void testName() throws IOException {
         Parser parser = new AsuraScans();
         assertEquals("I Grow Stronger By Eating!", parser.getName("https://www.asurascans.com/comics/i-grow-stronger-by-eating/"));
+        assertEquals("Damn Reincarnation", parser.getName("https://www.asurascans.com/manga/damn-reincarnation/"));
     }
     
     public void testChapters() throws IOException {
         Parser parser = new AsuraScans();
         Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://www.asurascans.com/comics/i-grow-stronger-by-eating/");
+        assertTrue(iterator.hasNext());
+        Chapter chapter = iterator.next();
+        assertNotNull(chapter);
+        assertEquals("1", chapter.getChapterId());
+        parser.downloadChapter(Files.createTempFile("unittest", "chapterdownload").toFile(), chapter);
+    }
+    
+    public void testChaptersManga() throws IOException {
+        Parser parser = new AsuraScans();
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://www.asurascans.com/manga/damn-reincarnation/");
         assertTrue(iterator.hasNext());
         Chapter chapter = iterator.next();
         assertNotNull(chapter);

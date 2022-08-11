@@ -25,9 +25,9 @@ import pl.droidsonroids.jspoon.annotation.Selector;
 public class AsuraScans extends StandardLayoutParser {
 
     @Getter
-    private Pattern uriPattern = Pattern.compile("https?://www.asurascans.com/comics/.+");
+    private Pattern uriPattern = Pattern.compile("https?://www.asurascans.com/(?:comics|manga)/.+");
     @Getter
-    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://www.asurascans.com/comics/([a-z-0-9]+)");
+    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://www.asurascans.com/(?:comics|manga)/([a-z-0-9]+)");
     @Getter
     private Pattern chapterUriUUIDPattern = Pattern.compile("https?://www.asurascans.com/([a-z-0-9]+)");
     @Getter
