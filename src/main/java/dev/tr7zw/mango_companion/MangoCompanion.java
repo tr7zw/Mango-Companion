@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-
 import dev.tr7zw.mango_companion.parser.AsuraScans;
 import dev.tr7zw.mango_companion.parser.Bilibilicomics;
 import dev.tr7zw.mango_companion.parser.Flamescans;
@@ -24,6 +22,7 @@ import dev.tr7zw.mango_companion.util.parser.Parser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 @Log
 @RequiredArgsConstructor
@@ -39,8 +38,10 @@ public class MangoCompanion implements Runnable {
         
         while (true) {
             List<String> updated = new ArrayList<>();
+            log.info("Starting check...");
             for (String url : App.getConfig().getUrls()) {
                 try {
+                    log.info("Checking '" + url + "'");
                     updateManga(url, updated);
                     if(String.join("\n", updated).length() > 950) { // Loaded so much that it just fits into a discord message
                         sendDiscordAndClear(updated);
@@ -50,6 +51,7 @@ public class MangoCompanion implements Runnable {
                 }
             }
             sendDiscordAndClear(updated);
+            log.info("Done with checks. Sleeping for " + App.getConfig().getSleepInMinutes() + " minutes.");
             try {
                 Thread.sleep(Duration.ofMinutes(App.getConfig().getSleepInMinutes()).toMillis());
             } catch (InterruptedException e) {
@@ -64,7 +66,7 @@ public class MangoCompanion implements Runnable {
             text = text.substring(0, 1000);
         }
         if(!text.isEmpty())
-            App.getDiscord().sendUpdateMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", text));
+            App.getDiscord().sendUpdateMessage(new EmbedBuilder().setTitle("Downloaded Chapters").addField("New", text, false));
         updated.clear();
     }
 
