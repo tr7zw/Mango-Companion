@@ -26,25 +26,29 @@ public abstract class StandardLayoutParser implements Parser {
     public abstract StandardLayoutApi getApi();
     
     public ParsedChapterEntry[] getChapters(String url) {
-        return getApi().getMangaInfo(getMangaUUID(url)).getChapters();
+        return getApi().getMangaInfo(getMangaUUID(remapUrl(url))).getChapters();
     }
 
     public List<String> getChapterUrls(String url) {
-        return getApi().getChapterPage(getMangaUUID(url), getChapterUUID(url)).getImageUrls();
+        return getApi().getChapterPage(getMangaUUID(remapUrl(url)), getChapterUUID(remapUrl(url))).getImageUrls();
     }
 
     public String getName(String url) throws IOException {
-        return getApi().getMangaInfo(getMangaUUID(url)).getTitle();
+        return getApi().getMangaInfo(getMangaUUID(remapUrl(url))).getTitle();
     }
     
     @Override
     public boolean canParse(String url) {
-        return getUriPattern().matcher(url).find();
+        return getUriPattern().matcher(remapUrl(url)).find();
+    }
+    
+    public String remapUrl(String url) {
+        return url;
     }
     
     @Override
     public Iterator<Chapter> getChapters(FileChecker checker, String url) throws IOException {
-        ParsedChapterEntry[] chapters = getChapters(url);
+        ParsedChapterEntry[] chapters = getChapters(remapUrl(url));
         return new Iterator<Chapter>() {
 
             int id = chapters.length - 1;
@@ -81,6 +85,9 @@ public abstract class StandardLayoutParser implements Parser {
         if (chapter.getParser().getClass() != this.getClass())
             throw new RuntimeException("Incompatible Chapter to Parser");
         List<String> urls = getImages(chapter);
+        if(urls == null) {
+            throw new IOException("Error while downloading Chapter " + chapter.getChapterId() + ": No Image urls found!");
+        }
         log.fine("Downloading " + target.getParentFile().getName() + " " + target.getName());
         int page = 1;
         try (ZipCreator zip = new ZipCreator(target)) {
@@ -113,13 +120,13 @@ public abstract class StandardLayoutParser implements Parser {
     }
     
     protected String getMangaUUID(String url) {
-        Matcher matcher = getMangaUriUUIDPattern().matcher(url);
+        Matcher matcher = getMangaUriUUIDPattern().matcher(remapUrl(url));
         if(!matcher.find())return null;
         return matcher.group(1);
     }
     
     protected String getChapterUUID(String url) {
-        Matcher matcher = getChapterUriUUIDPattern().matcher(url);
+        Matcher matcher = getChapterUriUUIDPattern().matcher(remapUrl(url));
         if(!matcher.find())return null;
         return matcher.group(1);
     }

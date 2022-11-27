@@ -109,10 +109,10 @@ public class Mangagreat extends AbstractMadaraParser implements MadaraSite {
 
         @Override
         public List<String> getImageUrls() {
-            if (imageUrlsGallery != null)
-                return imageUrlsGallery;
-            if (imageUrlsMangaChapter != null)
+            if (imageUrlsMangaChapter != null && !imageUrlsMangaChapter.isEmpty())
                 return imageUrlsMangaChapter;
+            if (imageUrlsGallery != null && !imageUrlsGallery.isEmpty())
+                return imageUrlsGallery;
             throw new NullPointerException("No image links where found!");
         }
 

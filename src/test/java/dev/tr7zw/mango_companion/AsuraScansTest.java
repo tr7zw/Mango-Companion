@@ -61,7 +61,7 @@ public class AsuraScansTest extends TestCase {
     
     public void testChaptersManga() throws IOException {
         Parser parser = new AsuraScans();
-        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://www.asurascans.com/manga/damn-reincarnation/");
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://asura.gg/manga/damn-reincarnation/");
         assertTrue(iterator.hasNext());
         Chapter chapter = iterator.next();
         assertNotNull(chapter);
@@ -71,7 +71,7 @@ public class AsuraScansTest extends TestCase {
     
     public void testSpecial() throws IOException {
         Parser parser = new AsuraScans();
-        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://www.asurascans.com/comics/367-reincarnation-of-the-suicidal-battle-god/");
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://asura.gg/manga/reincarnation-of-the-suicidal-battle-god/");
         while(iterator.hasNext()) {
             Chapter chapter = iterator.next();
             if("47".equals(chapter.getChapterId())) {

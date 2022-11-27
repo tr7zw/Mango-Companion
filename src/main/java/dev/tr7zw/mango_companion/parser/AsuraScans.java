@@ -1,7 +1,6 @@
 package dev.tr7zw.mango_companion.parser;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -25,11 +24,11 @@ import pl.droidsonroids.jspoon.annotation.Selector;
 public class AsuraScans extends StandardLayoutParser {
 
     @Getter
-    private Pattern uriPattern = Pattern.compile("https?://www.asurascans.com/(?:comics|manga)/.+");
+    private Pattern uriPattern = Pattern.compile("https?://asura.gg/(?:comics|manga)/.+");
     @Getter
-    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://www.asurascans.com/(?:comics|manga)/([a-z-0-9]+)");
+    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://asura.gg/(?:comics|manga)/([a-z-0-9]+)");
     @Getter
-    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://www.asurascans.com/([a-z-0-9]+)");
+    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://asura.gg/([a-z-0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
     private AsuraScansAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder())
@@ -46,6 +45,11 @@ public class AsuraScans extends StandardLayoutParser {
         @RequestLine("GET /{chapterUUID}/")
         ChapterPage getChapterPage(@Param("mangaUUID") String mangaUUID, @Param("chapterUUID") String chapterUUID);
 
+    }
+
+    @Override
+    public String remapUrl(String url) {
+        return super.remapUrl(url).replace("www.asurascans.com", "asura.gg");
     }
 
     @Getter
