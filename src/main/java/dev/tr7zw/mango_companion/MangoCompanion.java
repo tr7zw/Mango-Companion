@@ -23,6 +23,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.jodah.failsafe.Failsafe;
+import net.jodah.failsafe.Timeout;
 
 @Log
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class MangoCompanion implements Runnable {
     private final File workingDir;
     @Getter
     private Set<Parser> parsers = new HashSet<>(Arrays.asList(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans(), new Bilibilicomics()));
+    private static Timeout<Object> timeoutPolicy = Timeout.of(Duration.ofMinutes(1)).withInterrupt(true);
     
     @Override
     public void run() {
@@ -42,7 +45,9 @@ public class MangoCompanion implements Runnable {
             for (String url : App.getConfig().getUrls()) {
                 try {
                     log.info("Checking '" + url + "'");
-                    updateManga(url, updated);
+                    Failsafe.with(timeoutPolicy).run(() -> {
+                        updateManga(url, updated);
+                    });
                     if(String.join("\n", updated).length() > 950) { // Loaded so much that it just fits into a discord message
                         sendDiscordAndClear(updated);
                     }

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.Duration;
+import java.util.logging.Level;
 
 import feign.Client;
 import lombok.extern.java.Log;
@@ -19,7 +20,7 @@ public class StreamUtil {
 
     private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0";
     private static RetryPolicy<Object> retryPolicy = new RetryPolicy<>().handle(IOException.class)
-            .withDelay(Duration.ofSeconds(1)).onRetry(e -> log.warning("Error while opening connection. Retrying!"))
+            .withDelay(Duration.ofSeconds(1)).onRetry(e -> log.log(Level.WARNING, "Error while opening connection. Retrying!", e))
             .withMaxRetries(3);
 
     public static InputStream getStream(RateLimiter limiter, String url) throws IOException {
@@ -28,6 +29,8 @@ public class StreamUtil {
             URLConnection connection = new URL(url).openConnection();
             connection.setRequestProperty("User-Agent", userAgent);
             connection.addRequestProperty("Referer", url);
+            connection.setConnectTimeout((int) Duration.ofSeconds(20).toMillis());
+            connection.setReadTimeout((int) Duration.ofSeconds(20).toMillis());
             return connection.getInputStream();
         });
     }
@@ -37,6 +40,8 @@ public class StreamUtil {
         return Failsafe.with(retryPolicy).get(() -> {
             URLConnection connection = new URL(url).openConnection();
             connection.setRequestProperty("User-Agent", userAgent);
+            connection.setConnectTimeout((int) Duration.ofSeconds(20).toMillis());
+            connection.setReadTimeout((int) Duration.ofSeconds(20).toMillis());
             return connection.getInputStream();
         });
     }
