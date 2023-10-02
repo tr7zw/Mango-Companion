@@ -18,7 +18,7 @@ import okhttp3.Response;
 @Log
 public class StreamUtil {
 
-    private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0";
+    private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0";
     private static RetryPolicy<Object> retryPolicy = new RetryPolicy<>().handle(IOException.class)
             .withDelay(Duration.ofSeconds(1)).onRetry(e -> log.log(Level.WARNING, "Error while opening connection. Retrying!", e))
             .withMaxRetries(3);
