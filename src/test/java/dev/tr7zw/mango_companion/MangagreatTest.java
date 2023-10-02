@@ -35,21 +35,22 @@ public class MangagreatTest extends TestCase {
 
     public void testUrls() {
         Parser parser = new Mangagreat();
-        assertTrue(parser.canParse("https://mangagreat.com/manga/one-sword-reigns-supreme/"));
-        assertTrue(parser.canParse("http://mangagreat.com/manga/one-sword-reigns-supreme"));
-        assertFalse(parser.canParse("https://mangagreat.com/manga"));
-        assertFalse(parser.canParse("https://mangagreat.com/"));
-        assertFalse(parser.canParse("https://mangagreat.com/manga-genre/comic/"));
+        assertTrue(parser.canParse("https://mangagreat.org/manga/one-sword-reigns-supreme/"));
+        assertTrue(parser.canParse("http://mangagreat.org/manga/one-sword-reigns-supreme"));
+        assertFalse(parser.canParse("https://mangagreat.org/manga"));
+        assertFalse(parser.canParse("https://mangagreat.org/"));
+        assertFalse(parser.canParse("https://mangagreat.org/manga-genre/comic/"));
     }
     
     public void testName() throws IOException {
         Parser parser = new Mangagreat();
-        assertEquals("One Sword Reigns Supreme", parser.getName("https://mangagreat.com/manga/one-sword-reigns-supreme/"));
+        assertEquals("My Wife is a Demon Queen", parser.getName("https://mangagreat.org/manga/my-wife-is-a-demonn-queen/"));
+        assertEquals("Release That Witch", parser.getName("https://mangagreat.org/manga/release-thatt-witch/"));
     }
     
     public void testChapters() throws IOException {
         Parser parser = new Mangagreat();
-        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://mangagreat.com/manga/one-sword-reigns-supreme/");
+        Iterator<Chapter> iterator = parser.getChapters(new EmptyFileChecker(), "https://mangagreat.org/manga/one-sword-reigns-supreme-2/");
         assertTrue(iterator.hasNext());
         Chapter chapter = iterator.next();
         assertNotNull(chapter);

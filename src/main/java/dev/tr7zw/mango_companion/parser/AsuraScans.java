@@ -24,16 +24,16 @@ import pl.droidsonroids.jspoon.annotation.Selector;
 public class AsuraScans extends StandardLayoutParser {
 
     @Getter
-    private Pattern uriPattern = Pattern.compile("https?://asura.gg/(?:comics|manga)/.+");
+    private Pattern uriPattern = Pattern.compile("https?://asuratoon.com/(?:comics|manga)/.+");
     @Getter
-    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://asura.gg/(?:comics|manga)/([a-z-0-9]+)");
+    private Pattern mangaUriUUIDPattern = Pattern.compile("https?://asuratoon.com/(?:comics|manga)/([a-z-0-9]+)");
     @Getter
-    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://asura.gg/([a-z-0-9]+)");
+    private Pattern chapterUriUUIDPattern = Pattern.compile("https?://asuratoon.com/([a-z-0-9]+)");
     @Getter
     private RateLimiter limiter = new RateLimiter(5, Duration.ofSeconds(1));
     private AsuraScansAPI asuraApi = Feign.builder().decoder(new HTMLPojoDecoder())
             .client(StreamUtil.getClient(limiter)).encoder(new EmptyEncoder()).retryer(new Retryer.Default(1000, 1000, 3))
-            .target(AsuraScansAPI.class, "https://www.asurascans.com");
+            .target(AsuraScansAPI.class, "https://asuratoon.com");
     @Getter
     private StandardLayoutApi api = APIProxyBuilder.getProxy(asuraApi::getMangaInfo, asuraApi::getChapterPage);
 

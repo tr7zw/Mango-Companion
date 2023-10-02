@@ -42,7 +42,7 @@ public class Mangagreat extends AbstractMadaraParser implements MadaraSite {
 
     @Override
     public String url() {
-        return "https://mangagreat.com";
+        return "https://mangagreat.org";
     }
 
     private static interface MangaGreatAPI {
@@ -73,8 +73,8 @@ public class Mangagreat extends AbstractMadaraParser implements MadaraSite {
 
     @Getter
     private static class MangaInfo implements ParsedMangaInfo {
-        @Selector(".post-title h1")
-        String rawtitle;
+        @Selector(".site-content .container .post-title")
+        String title;
         @Selector(value = "head > link[rel=shortlink]", attr = "href")
         String shortLink;
         @Selector(value = ".short")
@@ -83,11 +83,6 @@ public class Mangagreat extends AbstractMadaraParser implements MadaraSite {
         @Override
         public ParsedChapterEntry[] getChapters() {
             return chaptersList.toArray(new ParsedChapterEntry[0]);
-        }
-
-        @Override
-        public String getTitle() {
-            return rawtitle.replace(" – Mangagreat", ""); // Mangagreat adds their name to each title
         }
 
     }
