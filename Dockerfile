@@ -1,9 +1,9 @@
-FROM adoptopenjdk/openjdk11-openj9:alpine-slim
+FROM openjdk:17.0-slim
 
-WORKDIR /companion
+WORKDIR /workspace
 
-COPY target/*-jar-with-dependencies.jar ./mango-companion.jar
+COPY target/mango-companion-*-jar-with-dependencies.jar /workspace/mango-companion.jar
 COPY webapp/style.css ./webapp/style.css
 COPY webapp/WEB-INF/web.xml ./webapp/WEB-INF/web.xml
 
-CMD ["java", "-jar", "mango-companion.jar", "/library"]
+CMD ["java", "-jar", "/workspace/mango-companion.jar", "/workspace/library"]

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  mangocompanion:
+    build: .
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+    volumes:
+      - "/path/to/mango/library:/workspace/library"
