@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mangocompanion:
-    build: .
+    image: ghcr.io/tr7zw/mango-companion:release
     restart: unless-stopped
     dns:
       - 8.8.8.8
