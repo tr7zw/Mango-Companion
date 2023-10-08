@@ -9,7 +9,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString
 @Getter
-public class Chapter {
+public class Chapter implements Comparable<Chapter> {
 
     private final Parser parser;
     private final String url;
@@ -17,5 +17,16 @@ public class Chapter {
     
     @Setter
     private Object parserData;
+
+    @Override
+    public int compareTo(Chapter o) {
+        return Double.compare(extractDouble(chapterId), extractDouble(o.getChapterId()));
+    }
+    
+    private static double extractDouble(String s) {
+        String num = s.replaceAll("[^\\d.]", "");
+        // return 0 if no digits found
+        return num.isEmpty() ? 0 : Double.parseDouble(num);
+    }
     
 }
