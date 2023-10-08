@@ -37,7 +37,7 @@ public class SimulatedBrowser implements Client {
         }
         try {
             Playwright playwright = Playwright.create();
-            browser = playwright.firefox().launch(new LaunchOptions().setHeadless(false)
+            browser = playwright.firefox().launch(new LaunchOptions().setHeadless(true)
                     .setFirefoxUserPrefs(Map.of("dom.image-lazy-loading.enabled", false)).setTimeout(60000));
             context = browser.newContext(new NewContextOptions()
                     .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0")

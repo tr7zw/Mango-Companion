@@ -4,7 +4,9 @@ services:
   mangocompanion:
     image: ghcr.io/tr7zw/mango-companion:release
     restart: unless-stopped
+    container_name: mangocompanion
     dns:
       - 8.8.8.8
     volumes:
-      - "/path/to/mango/library:/workspace/library"
+      - "/mango/library:/workspace/library"
+      - "/mango/companionCache:/root/.cache/ms-playwright"
