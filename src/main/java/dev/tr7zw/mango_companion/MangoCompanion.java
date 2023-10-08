@@ -17,6 +17,7 @@ import dev.tr7zw.mango_companion.parser.Flamescans;
 import dev.tr7zw.mango_companion.parser.Mangadex;
 import dev.tr7zw.mango_companion.parser.Mangatx;
 import dev.tr7zw.mango_companion.parser.ReadManganato;
+import dev.tr7zw.mango_companion.parser.Webtoon;
 import dev.tr7zw.mango_companion.util.FileChecker;
 import dev.tr7zw.mango_companion.util.parser.Parser;
 import lombok.Getter;
@@ -33,7 +34,7 @@ public class MangoCompanion implements Runnable {
     private static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
     private final File workingDir;
     @Getter
-    private Set<Parser> parsers = new HashSet<>(Arrays.asList(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans(), new Bilibilicomics()));
+    private Set<Parser> parsers = new HashSet<>(Arrays.asList(new Mangadex(), new ReadManganato(), new Mangatx(), new AsuraScans(), new Flamescans(), new Bilibilicomics(), new Webtoon()));
     private static Timeout<Object> timeoutPolicy = Timeout.of(Duration.ofMinutes(1)).withInterrupt(true);
     
     @Override

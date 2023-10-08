@@ -10,6 +10,8 @@ import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 
+import lombok.Synchronized;
+
 public class ZipCreator implements AutoCloseable{
 
     private ZipOutputStream out;
@@ -18,6 +20,7 @@ public class ZipCreator implements AutoCloseable{
         out = new ZipOutputStream(new FileOutputStream(outputFile));
     }
     
+    @Synchronized
     public void addFile(String name, InputStream stream) throws IOException {
         out.putNextEntry(new ZipEntry(name)); 
         // buffer size
@@ -30,16 +33,19 @@ public class ZipCreator implements AutoCloseable{
         stream.close();
     }
     
+    @Synchronized
     public void addFile(String name, byte[] data) throws IOException {
         out.putNextEntry(new ZipEntry(name)); 
         out.write(data);
     }
     
+    @Synchronized
     public void addFile(String name, BufferedImage image) throws IOException {
         out.putNextEntry(new ZipEntry(name)); 
         ImageIO.write(image, "PNG", out);
     }
 
+    @Synchronized
     @Override
     public void close() throws Exception {
         out.close();
