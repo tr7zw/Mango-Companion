@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-core</artifactId>
-			<version>13.3</version>
+			<version>13.4</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
@@ -132,7 +132,7 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
-            <version>13.3</version>
+            <version>13.4</version>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
